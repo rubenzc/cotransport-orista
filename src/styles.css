@@ -748,3 +748,8 @@ textarea:focus-visible,
   width: 100%;
   max-width: 320px;
 }
+
+/* ===== Banner de Netlify (lo inyecta la plataforma) ===== */
+#nl-badge-frame {
+  display: none !important;
+}
