@@ -58,6 +58,9 @@ export default function LoginScene() {
           <path className="il-near" d="M176 224c34-22 62-62 96-92 16-14 36-18 52-8 14 9 22 28 36 44 12 15 28 24 40 28v64H176Z" />
           <path className="il-near-shade" d="M296 124c14 8 22 26 34 40 12 16 28 26 42 30l28 14v-20c-14-5-28-14-40-28-14-16-22-35-36-44-8-5-18-6-28-2Z" />
 
+          {/* explanada de hierba bajo la ermita: la asienta sobre la cima, sin huecos en las esquinas */}
+          <path className="il-near" d="M250 150C253 139 260 133.5 270 132H334C344 132 350 138 354 150V162H250Z" />
+
           {/* pinos piñoneros a la izquierda y abeto a la derecha, como en la ermita */}
           <g className="il-tree">
             <rect x="241.4" y="146" width="1.8" height="14" />
@@ -70,6 +73,7 @@ export default function LoginScene() {
           </g>
 
           {/* ermita de piedra: nave con tejado a dos aguas, campanario cuadrado adosado con tejado piramidal */}
+          <path className="il-near-shade" d="M259 132h76c3 0 5 1 6 3H253c1-2 3-3 6-3Z" />
           <rect className="il-stone-shade" x="303" y="115" width="27" height="17" />
           <path className="il-roof-shade" d="M300 113l32 5v3l-32-5Z" />
           <rect className="il-stone" x="276" y="112" width="28" height="20" />
