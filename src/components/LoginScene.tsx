@@ -59,10 +59,11 @@ export default function LoginScene() {
           <path className="il-near-shade" d="M296 124c14 8 22 26 34 40 12 16 28 26 42 30l28 14v-20c-14-5-28-14-40-28-14-16-22-35-36-44-8-5-18-6-28-2Z" />
 
           {/* ermita de piedra: nave con tejado a dos aguas y campanario cuadrado adosado con tejado piramidal.
-              Todo apoya en la misma línea (y = 138); el tejado lateral nace de la cumbrera de la fachada y, junto
-              con el muro y su base, se estrecha hacia un punto de fuga común a la derecha (440, 128). */}
-          <path className="il-stone-shade" d="M305 114 333 117V136L305 138Z" />
-          <path className="il-roof-shade" d="M291 101 333 108.6V117.4L309 115Z" />
+              Proyección paralela: la profundidad de la nave se dibuja siempre con el mismo desplazamiento (28, 0),
+              así que cumbrera y alero son paralelos y el borde lejano del tejado copia la inclinación del frontón.
+              Todo apoya en la misma línea (y = 138). */}
+          <rect className="il-stone-shade" x="305" y="114" width="28" height="24" />
+          <path className="il-roof-shade" d="M291 101H319L337 115H309Z" />
           <rect className="il-stone" x="277" y="114" width="28" height="24" />
           <path className="il-roof" d="M273 115 291 101 309 115Z" />
           <rect className="il-roof-shade" x="273" y="114.2" width="36" height="2" />
