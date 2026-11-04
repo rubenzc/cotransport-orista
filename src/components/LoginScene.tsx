@@ -58,33 +58,18 @@ export default function LoginScene() {
           <path className="il-near" d="M176 224c34-22 62-62 96-92 16-14 36-18 52-8 14 9 22 28 36 44 12 15 28 24 40 28v64H176Z" />
           <path className="il-near-shade" d="M296 124c14 8 22 26 34 40 12 16 28 26 42 30l28 14v-20c-14-5-28-14-40-28-14-16-22-35-36-44-8-5-18-6-28-2Z" />
 
-          {/* explanada de hierba bajo la ermita: la asienta sobre la cima, sin huecos en las esquinas */}
-          <path className="il-near" d="M250 150C253 139 260 133.5 270 132H334C344 132 350 138 354 150V162H250Z" />
-
-          {/* pinos piñoneros a la izquierda y abeto a la derecha, como en la ermita */}
-          <g className="il-tree">
-            <rect x="241.4" y="146" width="1.8" height="14" />
-            <ellipse cx="242.3" cy="144" rx="10" ry="4.6" />
-            <rect x="256.4" y="152" width="1.6" height="12" />
-            <ellipse cx="257.2" cy="150" rx="8" ry="3.8" />
-            <path d="M350 138l-9 0 9-30 9 30Z" />
-            <path d="M350 138l-12 0 12-22 12 22Z" />
-            <path d="M372 164l-7 0 7-24 7 24Z" />
-          </g>
-
           {/* ermita de piedra: nave con tejado a dos aguas, campanario cuadrado adosado con tejado piramidal */}
-          <path className="il-near-shade" d="M259 132h76c3 0 5 1 6 3H253c1-2 3-3 6-3Z" />
-          <rect className="il-stone-shade" x="303" y="115" width="27" height="17" />
+          <rect className="il-stone-shade" x="303" y="115" width="27" height="21" />
           <path className="il-roof-shade" d="M300 113l32 5v3l-32-5Z" />
-          <rect className="il-stone" x="276" y="112" width="28" height="20" />
+          <rect className="il-stone" x="276" y="112" width="28" height="23" />
           <path className="il-roof" d="M272 113 290 101l18 12Z" />
           <rect className="il-roof-shade" x="272" y="112" width="36" height="2" />
           <circle className="il-window" cx="290" cy="119" r="2.3" />
           <rect className="il-stone-shade" x="285.4" y="121" width="9.2" height="2.2" />
           <rect className="il-door" x="287" y="123.2" width="6" height="8.8" />
 
-          <rect className="il-stone" x="265" y="84" width="12" height="48" />
-          <rect className="il-stone-shade" x="272.4" y="84" width="4.6" height="48" />
+          <rect className="il-stone" x="265" y="84" width="12" height="57" />
+          <rect className="il-stone-shade" x="272.4" y="84" width="4.6" height="57" />
           <path className="il-roof" d="M262.6 85.5 271 74l8.4 11.5Z" />
           <path className="il-roof-shade" d="M271 74l8.4 11.5H271Z" />
           <path className="il-cross" d="M271 74V66M268 69h6" fill="none" strokeWidth="1.3" strokeLinecap="round" />
