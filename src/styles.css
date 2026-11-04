@@ -20,6 +20,35 @@
   --radius: 14px;
   --shadow: 0 1px 2px rgb(0 0 0 / 6%), 0 4px 12px rgb(0 0 0 / 4%);
   --tabbar-h: 64px;
+  /* ilustración de la pantalla de acceso (día) */
+  --ill-sun-op: 1;
+  --ill-night-op: 0;
+  --ill-sun: #f2c14e;
+  --ill-moon: #efe8c6;
+  --ill-star: #cfd6c4;
+  --ill-cloud: #ffffff;
+  --ill-far: #d3e0d1;
+  --ill-mid: #bcd7b3;
+  --ill-mid2: #9fc595;
+  --ill-field-a: #b0cf9f;
+  --ill-field-b: #c9dea8;
+  --ill-near: #5b9462;
+  --ill-near-shade: #4a8253;
+  --ill-tree: #2f6b3c;
+  --ill-stone: #e4dcc8;
+  --ill-stone-shade: #c9bfa6;
+  --ill-roof: #b5603a;
+  --ill-roof-shade: #8f4a2c;
+  --ill-door: #5a4a3a;
+  --ill-window: #5a4a3a;
+  --ill-front: #3f7d4b;
+  --ill-road: #3b4b40;
+  --ill-road-line: #e9eddc;
+  --ill-car: #ffffff;
+  --ill-win: #2f6b3c;
+  --ill-tire: #263329;
+  --ill-leaf: #3f9a4f;
+  --ill-leaf-vein: #e3f5da;
   color-scheme: light;
 }
 
@@ -45,6 +74,32 @@
     --danger: #f2a39d;
     --danger-soft: #42201e;
     --shadow: none;
+        /* ilustración de la pantalla de acceso (noche) */
+    --ill-sun-op: 0;
+    --ill-night-op: 1;
+    --ill-cloud: #26332a;
+    --ill-far: #1e2c23;
+    --ill-mid: #233a2b;
+    --ill-mid2: #294432;
+    --ill-field-a: #2d4a37;
+    --ill-field-b: #335040;
+    --ill-near: #30503a;
+    --ill-near-shade: #284631;
+    --ill-tree: #17301f;
+    --ill-stone: #a39d88;
+    --ill-stone-shade: #7f7a68;
+    --ill-roof: #8f4f35;
+    --ill-roof-shade: #6e3b27;
+    --ill-door: #1a1d18;
+    --ill-window: #f1c25b;
+    --ill-front: #1c2e22;
+    --ill-road: #0f1511;
+    --ill-road-line: #4a5b4d;
+    --ill-car: #f2f6ef;
+    --ill-win: #1f3a28;
+    --ill-tire: #0f1511;
+    --ill-leaf: #bfe6ae;
+    --ill-leaf-vein: #1f3a28;
     color-scheme: dark;
   }
 }
@@ -67,6 +122,32 @@
   --danger: #f2a39d;
   --danger-soft: #42201e;
   --shadow: none;
+    /* ilustración de la pantalla de acceso (noche) */
+  --ill-sun-op: 0;
+  --ill-night-op: 1;
+  --ill-cloud: #26332a;
+  --ill-far: #1e2c23;
+  --ill-mid: #233a2b;
+  --ill-mid2: #294432;
+  --ill-field-a: #2d4a37;
+  --ill-field-b: #335040;
+  --ill-near: #30503a;
+  --ill-near-shade: #284631;
+  --ill-tree: #17301f;
+  --ill-stone: #a39d88;
+  --ill-stone-shade: #7f7a68;
+  --ill-roof: #8f4f35;
+  --ill-roof-shade: #6e3b27;
+  --ill-door: #1a1d18;
+  --ill-window: #f1c25b;
+  --ill-front: #1c2e22;
+  --ill-road: #0f1511;
+  --ill-road-line: #4a5b4d;
+  --ill-car: #f2f6ef;
+  --ill-win: #1f3a28;
+  --ill-tire: #0f1511;
+  --ill-leaf: #bfe6ae;
+  --ill-leaf-vein: #1f3a28;
   color-scheme: dark;
 }
 
@@ -746,9 +827,6 @@ textarea:focus-visible,
   align-items: center;
   gap: 0.6rem;
 }
-.login-hero img {
-  border-radius: 22px;
-}
 .login-hero h1 {
   font-size: 2rem;
 }
@@ -896,4 +974,140 @@ textarea:focus-visible,
 button,
 .badge {
   overflow-wrap: normal;
+}
+
+/* ===== Pantalla de acceso: ilustración a sangre, sin bordes ===== */
+.login {
+  /* alto de la escena: el que sobra sobre el formulario (~530px); mínimo para que la torre siga a la vista */
+  --scene-h: clamp(170px, calc(100dvh - 530px), 310px);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-bottom: 1.5rem;
+}
+.login > :not(.login-scene) {
+  width: calc(100% - 2rem);
+  max-width: 448px;
+  margin-inline: auto;
+}
+.login-scene {
+  width: 100%;
+  /* en pantallas anchas conserva sus proporciones (no se recorta) y se desvanece por los lados */
+  max-width: calc(var(--scene-h) * 1.6);
+  margin-inline: auto;
+  height: var(--scene-h);
+  /* el prado se funde con el fondo de la página: sin recuadro ni bordes */
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
+.login-scene svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@media (min-width: 760px) {
+  .login-scene {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
+      linear-gradient(to bottom, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
+      linear-gradient(to bottom, #000 70%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+}
+.login-hero {
+  margin-top: -0.75rem;
+}
+.il-sun {
+  opacity: var(--ill-sun-op);
+}
+.il-night {
+  opacity: var(--ill-night-op);
+}
+.il-sun-halo {
+  fill: var(--ill-sun);
+  opacity: 0.28;
+}
+.il-sun-disc {
+  fill: var(--ill-sun);
+}
+.il-moon {
+  fill: var(--ill-moon);
+}
+.il-moon-shadow {
+  fill: var(--bg);
+}
+.il-star {
+  fill: var(--ill-star);
+}
+.il-cloud {
+  fill: var(--ill-cloud);
+  opacity: 0.92;
+}
+.il-far {
+  fill: var(--ill-far);
+}
+.il-mid {
+  fill: var(--ill-mid);
+}
+.il-mid2 {
+  fill: var(--ill-mid2);
+}
+.il-field-a {
+  fill: var(--ill-field-a);
+}
+.il-field-b {
+  fill: var(--ill-field-b);
+}
+.il-near {
+  fill: var(--ill-near);
+}
+.il-near-shade {
+  fill: var(--ill-near-shade);
+}
+.il-tree {
+  fill: var(--ill-tree);
+}
+.il-stone {
+  fill: var(--ill-stone);
+}
+.il-stone-shade {
+  fill: var(--ill-stone-shade);
+}
+.il-roof {
+  fill: var(--ill-roof);
+}
+.il-roof-shade {
+  fill: var(--ill-roof-shade);
+}
+.il-door {
+  fill: var(--ill-door);
+}
+.il-window {
+  fill: var(--ill-window);
+}
+.il-front {
+  fill: var(--ill-front);
+}
+.il-road {
+  fill: var(--ill-road);
+}
+.il-road-line {
+  fill: var(--ill-road-line);
+}
+.il-car {
+  fill: var(--ill-car);
+}
+.il-win {
+  fill: var(--ill-win);
+}
+.il-tire {
+  fill: var(--ill-tire);
+}
+.il-leaf {
+  fill: var(--ill-leaf);
+}
+.il-leaf-vein {
+  stroke: var(--ill-leaf-vein);
 }

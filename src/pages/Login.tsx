@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Icon } from '../components/Icon';
+import LoginScene from '../components/LoginScene';
 import { ErrorBox, Field, LangLinks } from '../components/ui';
 import { TOWN, USERNAME_RE, usernameToEmail } from '../lib/config';
 import { useT } from '../lib/i18n';
@@ -52,9 +53,10 @@ export default function Login() {
   }
 
   return (
-    <div className="screen-center login">
+    <div className="login">
+      <LoginScene />
+
       <div className="login-hero">
-        <img src="./icon.svg" alt="" width={96} height={96} />
         <h1>
           Cotransport <span>{TOWN}</span>
         </h1>
