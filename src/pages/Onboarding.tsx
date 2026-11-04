@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { ErrorBox, Field, LangSwitch } from '../components/ui';
+import { ErrorBox, Field, LangLinks } from '../components/ui';
 import { useAuth } from '../lib/auth';
 import { TOWN } from '../lib/config';
 import { useT } from '../lib/i18n';
@@ -27,7 +27,6 @@ export default function Onboarding() {
 
   return (
     <div className="screen-center">
-      <LangSwitch />
       <form className="card stack" onSubmit={save}>
         <h2>{t('ob.title', { town: TOWN })}</h2>
         <p className="muted">{t('ob.sub')}</p>
@@ -45,6 +44,8 @@ export default function Onboarding() {
           {t('pp.signOut')}
         </button>
       </form>
+
+      <LangLinks />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Icon } from '../components/Icon';
-import { ErrorBox, Field, LangSwitch } from '../components/ui';
+import { ErrorBox, Field, LangSwitch, ThemeSwitch } from '../components/ui';
 import { useAuth } from '../lib/auth';
 import { emailToUsername } from '../lib/config';
 import { useT } from '../lib/i18n';
@@ -58,8 +58,16 @@ export default function ProfilePage() {
       <h2>{t('pp.title')}</h2>
 
       <section className="card stack">
-        <h3>{t('lang.label')}</h3>
-        <LangSwitch />
+        <h3>{t('pp.preferences')}</h3>
+        <div className="field">
+          <span className="field-label">{t('lang.label')}</span>
+          <LangSwitch />
+        </div>
+        <div className="field">
+          <span className="field-label">{t('theme.label')}</span>
+          <ThemeSwitch />
+          <span className="field-hint">{t('theme.hint')}</span>
+        </div>
       </section>
 
       <form className="card stack" onSubmit={saveProfile}>

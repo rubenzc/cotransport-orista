@@ -10,10 +10,13 @@ import {
   EyeOff,
   FileText,
   Hand,
+  Languages,
   Leaf,
   Map as MapIcon,
   MapPin,
   MessageCircle,
+  MonitorSmartphone,
+  Moon,
   PartyPopper,
   Pencil,
   Phone,
@@ -22,6 +25,7 @@ import {
   ShoppingCart,
   Star,
   Stethoscope,
+  Sun,
   User,
 } from 'lucide-react';
 
@@ -51,6 +55,10 @@ const ICONS = {
   eyeOff: EyeOff,
   hand: Hand,
   star: Star,
+  languages: Languages,
+  sun: Sun,
+  moon: Moon,
+  auto: MonitorSmartphone,
 };
 
 export type IconName = keyof typeof ICONS;

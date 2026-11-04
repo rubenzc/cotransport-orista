@@ -1,7 +1,9 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { DAY_NUMBERS, FREQUENT_PLACES } from '../lib/config';
 import { dayName, dayShort } from '../lib/format';
-import { useT, type Lang } from '../lib/i18n';
+import { useT, type Key, type Lang } from '../lib/i18n';
+import { getStoredTheme, setTheme, type ThemeMode } from '../lib/theme';
+import { Icon, type IconName } from './Icon';
 
 export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
@@ -61,13 +63,19 @@ export function Segmented<T extends string>({
   value,
   onChange,
   options,
+  label,
+  stacked,
 }: {
   value: T;
   onChange: (v: T) => void;
   options: { value: T; label: ReactNode }[];
+  /** nombre accesible del grupo (lectores de pantalla) */
+  label?: string;
+  /** icono encima del texto: para opciones con icono que no caben en una fila */
+  stacked?: boolean;
 }) {
   return (
-    <div className="segmented" role="radiogroup">
+    <div className={stacked ? 'segmented stacked' : 'segmented'} role="radiogroup" aria-label={label}>
       {options.map((o) => (
         <button
           key={o.value}
@@ -89,12 +97,67 @@ export function LangSwitch() {
   const { lang, setLang, t } = useT();
   return (
     <Segmented<Lang>
+      label={t('lang.label')}
       value={lang}
       onChange={setLang}
       options={[
-        { value: 'ca', label: t('lang.ca') },
-        { value: 'es', label: t('lang.es') },
+        { value: 'ca', label: <span lang="ca">{t('lang.ca')}</span> },
+        { value: 'es', label: <span lang="es">{t('lang.es')}</span> },
       ]}
+    />
+  );
+}
+
+/** Idioma discreto para la pantalla de acceso: dos enlaces de texto, sin competir con el logo ni el formulario. */
+export function LangLinks() {
+  const { lang, setLang, t } = useT();
+  const options: { value: Lang; label: Key }[] = [
+    { value: 'ca', label: 'lang.ca' },
+    { value: 'es', label: 'lang.es' },
+  ];
+  return (
+    <div className="lang-links" role="group" aria-label={t('lang.label')}>
+      <Icon name="languages" />
+      {options.map((o, i) => (
+        <span key={o.value} className="lang-item">
+          {i > 0 && <span aria-hidden="true">·</span>}
+          <button type="button" lang={o.value} aria-pressed={lang === o.value} onClick={() => setLang(o.value)}>
+            {t(o.label)}
+          </button>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+const THEME_OPTIONS: { value: ThemeMode; label: Key; icon: IconName }[] = [
+  { value: 'auto', label: 'theme.auto', icon: 'auto' },
+  { value: 'light', label: 'theme.light', icon: 'sun' },
+  { value: 'dark', label: 'theme.dark', icon: 'moon' },
+];
+
+/** Tema de la interfaz: automático (el del dispositivo), claro u oscuro. */
+export function ThemeSwitch() {
+  const { t } = useT();
+  const [mode, setMode] = useState<ThemeMode>(getStoredTheme);
+  return (
+    <Segmented<ThemeMode>
+      stacked
+      label={t('theme.label')}
+      value={mode}
+      onChange={(m) => {
+        setTheme(m);
+        setMode(m);
+      }}
+      options={THEME_OPTIONS.map((o) => ({
+        value: o.value,
+        label: (
+          <>
+            <Icon name={o.icon} />
+            {t(o.label)}
+          </>
+        ),
+      }))}
     />
   );
 }

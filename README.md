@@ -14,7 +14,8 @@ Web app para que los vecinos de un pueblo sin transporte público compartan coch
 - **Mis viajes**: los que organizas (con aviso de solicitudes pendientes) y a los que te has apuntado.
 - La ficha del viaje **se actualiza en tiempo real** cuando otro vecino hace algo.
 - **Acceso con usuario y contraseña**, sin enviar ningún correo (ver más abajo cómo funciona).
-- **Idiomas**: catalán por defecto y español de España, seleccionable en la pantalla de acceso y en el perfil. La elección se recuerda en el navegador.
+- **Idiomas**: catalán por defecto y español, seleccionable con dos enlaces discretos bajo el formulario de acceso y en *Perfil → Preferencias*. La elección se recuerda en el navegador.
+- **Modo claro, oscuro o automático** en *Perfil → Preferencias*. Por defecto («Automático») sigue el tema del dispositivo; la elección se recuerda en el navegador.
 
 ## Tecnología
 

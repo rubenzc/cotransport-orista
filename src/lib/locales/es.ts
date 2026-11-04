@@ -76,7 +76,7 @@ export const es: Dict = {
   'pr.rechazada': 'Rechazada',
   'pr.retirada': 'Retirada',
 
-  'lg.tagline': 'Compartimos coche entre vecinos para movernos por la comarca.',
+  'lg.tagline': 'Comunidad, sostenibilidad y ahorro',
   'lg.username': 'Nombre de usuario',
   'lg.usernameHint': 'Solo letras minúsculas, números y . _ -',
   'lg.password': 'Contraseña',
@@ -275,6 +275,12 @@ export const es: Dict = {
   'mt.seeAvailable': 'Ver viajes disponibles',
 
   'pp.title': 'Mi perfil',
+  'pp.preferences': 'Preferencias',
+  'theme.label': 'Apariencia',
+  'theme.auto': 'Automático',
+  'theme.light': 'Claro',
+  'theme.dark': 'Oscuro',
+  'theme.hint': 'Automático sigue el tema de tu dispositivo.',
   'pp.name': 'Nombre',
   'pp.phone': 'Teléfono',
   'pp.phoneHint': 'Visible para los vecinos registrados, para coordinar viajes.',

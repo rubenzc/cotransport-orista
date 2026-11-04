@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Icon } from '../components/Icon';
-import { ErrorBox, Field, LangSwitch } from '../components/ui';
+import { ErrorBox, Field, LangLinks } from '../components/ui';
 import { TOWN, USERNAME_RE, usernameToEmail } from '../lib/config';
 import { useT } from '../lib/i18n';
 import { errorText, supabase } from '../lib/supabase';
@@ -53,10 +53,8 @@ export default function Login() {
 
   return (
     <div className="screen-center login">
-      <LangSwitch />
-
       <div className="login-hero">
-        <img src="./icon.svg" alt="" width={72} height={72} />
+        <img src="./icon.svg" alt="" width={96} height={96} />
         <h1>
           Cotransport <span>{TOWN}</span>
         </h1>
@@ -110,6 +108,8 @@ export default function Login() {
           {signup ? t('lg.toSignin') : t('lg.toSignup')}
         </button>
       </form>
+
+      <LangLinks />
     </div>
   );
 }

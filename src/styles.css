@@ -23,8 +23,10 @@
   color-scheme: light;
 }
 
+/* Tema oscuro: lo activa el dispositivo (modo "automático") o la elección del usuario (<html data-theme="dark">).
+   Si el usuario fija "claro", gana sobre el dispositivo. Los dos bloques deben tener los mismos valores. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #141814;
     --surface: #1d231d;
     --surface-2: #263026;
@@ -45,6 +47,27 @@
     --shadow: none;
     color-scheme: dark;
   }
+}
+:root[data-theme='dark'] {
+  --bg: #141814;
+  --surface: #1d231d;
+  --surface-2: #263026;
+  --text: #e8ede6;
+  --muted: #a3b0a1;
+  --border: #334033;
+  --primary: #6fbf7f;
+  --primary-ink: #0f1a10;
+  --primary-soft: #23382a;
+  --accent: #f0a46c;
+  --accent-soft: #3d2b1e;
+  --ok: #7fd394;
+  --ok-soft: #1f3a27;
+  --warn: #f1c25b;
+  --warn-soft: #3a3019;
+  --danger: #f2a39d;
+  --danger-soft: #42201e;
+  --shadow: none;
+  color-scheme: dark;
 }
 
 /* ===== Base ===== */
@@ -724,10 +747,13 @@ textarea:focus-visible,
   gap: 0.6rem;
 }
 .login-hero img {
-  border-radius: 18px;
+  border-radius: 22px;
 }
 .login-hero h1 {
-  font-size: 1.8rem;
+  font-size: 2rem;
+}
+.login-hero p {
+  font-size: 1.05rem;
 }
 .login-hero h1 span {
   color: var(--primary);
@@ -743,13 +769,6 @@ textarea:focus-visible,
     margin: 0;
     padding-inline: 0;
   }
-}
-
-/* ===== Login por usuario ===== */
-.login .segmented {
-  align-self: center;
-  width: 100%;
-  max-width: 320px;
 }
 
 /* ===== Banner de Netlify (lo inyecta la plataforma) ===== */
@@ -822,4 +841,59 @@ textarea:focus-visible,
 }
 .ok-ico {
   color: var(--ok);
+}
+
+/* ===== Idioma discreto (acceso) y tema ===== */
+.lang-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.lang-links .ico {
+  margin-right: 0.35rem;
+}
+.lang-item {
+  display: inline-flex;
+  align-items: center;
+}
+.lang-links button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.6rem;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.lang-links button[aria-pressed='true'] {
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+.lang-links button:hover {
+  color: var(--text);
+}
+.lang-links button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 45%, transparent);
+  outline-offset: 1px;
+}
+
+/* Selector con icono sobre el texto (tema) y botones sin cortes de palabra */
+.segmented.stacked .seg {
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0.2rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+button,
+.badge {
+  overflow-wrap: normal;
 }

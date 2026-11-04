@@ -74,7 +74,7 @@ export const ca = {
   'pr.rechazada': 'Rebutjada',
   'pr.retirada': 'Retirada',
 
-  'lg.tagline': "Compartim cotxe entre veïns per moure'ns per la comarca.",
+  'lg.tagline': 'Comunitat, sostenibilitat i estalvi',
   'lg.username': "Nom d'usuari",
   'lg.usernameHint': 'Només lletres minúscules, números i . _ -',
   'lg.password': 'Contrasenya',
@@ -273,6 +273,12 @@ export const ca = {
   'mt.seeAvailable': 'Mira els viatges disponibles',
 
   'pp.title': 'El meu perfil',
+  'pp.preferences': 'Preferències',
+  'theme.label': 'Aspecte',
+  'theme.auto': 'Automàtic',
+  'theme.light': 'Clar',
+  'theme.dark': 'Fosc',
+  'theme.hint': 'Automàtic segueix el tema del teu dispositiu.',
   'pp.name': 'Nom',
   'pp.phone': 'Telèfon',
   'pp.phoneHint': 'Visible per als veïns registrats, per coordinar viatges.',
