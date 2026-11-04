@@ -64,7 +64,7 @@ export function Segmented<T extends string>({
 }: {
   value: T;
   onChange: (v: T) => void;
-  options: { value: T; label: string }[];
+  options: { value: T; label: ReactNode }[];
 }) {
   return (
     <div className="segmented" role="radiogroup">
@@ -118,7 +118,7 @@ export function ErrorBox({ message }: { message: string | null }) {
   );
 }
 
-export function Empty({ icon, title, children }: { icon: string; title: string; children?: ReactNode }) {
+export function Empty({ icon, title, children }: { icon: ReactNode; title: string; children?: ReactNode }) {
   return (
     <div className="empty">
       <div className="empty-icon" aria-hidden="true">

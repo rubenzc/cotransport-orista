@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { Icon } from '../components/Icon';
 import { ErrorBox, Field, LangSwitch } from '../components/ui';
 import { useAuth } from '../lib/auth';
 import { emailToUsername } from '../lib/config';
@@ -81,7 +82,7 @@ export default function ProfilePage() {
             <li key={v.id} className="person-item">
               <div className="person">
                 <span className="avatar" aria-hidden="true">
-                  🚗
+                  <Icon name="car" />
                 </span>
                 <span className="person-name">
                   {v.model}
@@ -120,6 +121,7 @@ function VehicleForm({ onSaved }: { onSaved: () => void }) {
   if (!open) {
     return (
       <button type="button" className="btn block" onClick={() => setOpen(true)}>
+        <Icon name="plus" />
         {t('pp.addVehicle')}
       </button>
     );

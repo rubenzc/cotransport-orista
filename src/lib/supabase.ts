@@ -16,8 +16,10 @@ export const TRIP_SELECT =
   `*, owner:profiles(${PROFILE_FIELDS}), vehicle:vehicles(*), ` +
   `commitments(*, user:profiles(${PROFILE_FIELDS}))`;
 
-// Codis d'error de Supabase Auth -> clau de traducció
-const AUTH_ERRORS: Record<string, Key> = {
+// Codis d'error de Supabase Auth i PostgREST -> clau de traducció
+const CODE_ERRORS: Record<string, Key> = {
+  PGRST116: 'err.notFound', // "JSON object requested, multiple (or no) rows returned"
+  '23503': 'err.missingData', // clave foránea: el usuario o el viaje ya no existen
   invalid_credentials: 'ae.invalid',
   user_already_exists: 'ae.exists',
   weak_password: 'ae.weak',
@@ -37,7 +39,7 @@ export function errorText(e: unknown): string {
   const message = typeof e === 'string' ? e : obj?.message ? String(obj.message) : '';
   const code = obj?.code ? String(obj.code) : '';
 
-  if (AUTH_ERRORS[code]) return tr(AUTH_ERRORS[code]);
+  if (CODE_ERRORS[code]) return tr(CODE_ERRORS[code]);
   const dbKey = `db.${message}`;
   if (hasKey(dbKey)) return tr(dbKey);
   return message || tr('common.unknownError');

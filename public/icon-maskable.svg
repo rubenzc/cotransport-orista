@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Cotransport Oristà">
+  <!-- Versión a sangre completa (sin esquinas transparentes) y con el dibujo en la zona segura central -->
+  <rect width="512" height="512" fill="#2f6b3c"/>
+  <g transform="translate(256 262) scale(0.74) translate(-256 -236)">
+    <path d="M236 206C206 128 248 66 340 54C356 138 318 206 236 206Z" fill="#bfe6ae"/>
+    <path d="M238 204C268 150 300 108 332 66" fill="none" stroke="#2f6b3c" stroke-width="9" stroke-linecap="round"/>
+    <path d="M146 300L186 226C194 212 206 206 222 206H300C316 206 328 212 338 226L378 300Z" fill="#ffffff"/>
+    <rect x="86" y="290" width="340" height="100" rx="42" fill="#ffffff"/>
+    <path d="M180 290L204 240H244V290Z" fill="#2f6b3c"/>
+    <path d="M264 240H298C304 240 308 243 312 248L338 290H264Z" fill="#2f6b3c"/>
+    <circle cx="176" cy="392" r="52" fill="#2f6b3c"/>
+    <circle cx="176" cy="392" r="40" fill="#ffffff"/>
+    <circle cx="176" cy="392" r="15" fill="#2f6b3c"/>
+    <circle cx="338" cy="392" r="52" fill="#2f6b3c"/>
+    <circle cx="338" cy="392" r="40" fill="#ffffff"/>
+    <circle cx="338" cy="392" r="15" fill="#2f6b3c"/>
+  </g>
+</svg>

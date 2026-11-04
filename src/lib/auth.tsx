@@ -32,7 +32,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await loadProfile(data.session);
       setLoading(false);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
+      // al cerrar sesión se vuelve al inicio: la siguiente persona no debe heredar la pantalla anterior
+      if (event === 'SIGNED_OUT') window.location.hash = '#/';
       setSession(s);
       // fora del callback per no bloquejar el client d'autenticació
       setTimeout(() => loadProfile(s), 0);

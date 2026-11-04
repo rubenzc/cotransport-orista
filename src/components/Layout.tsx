@@ -1,12 +1,13 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { TOWN } from '../lib/config';
 import { useT, type Key } from '../lib/i18n';
+import { Icon, type IconName } from './Icon';
 
-const TABS: { to: string; label: Key; icon: string; end: boolean }[] = [
-  { to: '/', label: 'nav.trips', icon: '🗺️', end: true },
-  { to: '/nuevo', label: 'nav.publish', icon: '➕', end: false },
-  { to: '/mis-viajes', label: 'nav.mine', icon: '🧾', end: false },
-  { to: '/perfil', label: 'nav.profile', icon: '👤', end: false },
+const TABS: { to: string; label: Key; icon: IconName; end: boolean }[] = [
+  { to: '/', label: 'nav.trips', icon: 'map', end: true },
+  { to: '/nuevo', label: 'nav.publish', icon: 'plus', end: false },
+  { to: '/mis-viajes', label: 'nav.mine', icon: 'list', end: false },
+  { to: '/perfil', label: 'nav.profile', icon: 'user', end: false },
 ];
 
 export default function Layout() {
@@ -30,8 +31,8 @@ export default function Layout() {
             end={tab.end}
             className={({ isActive }) => (isActive ? 'tab active' : 'tab')}
           >
-            <span className="tab-icon" aria-hidden="true">
-              {tab.icon}
+            <span className="tab-icon">
+              <Icon name={tab.icon} />
             </span>
             {t(tab.label)}
           </NavLink>

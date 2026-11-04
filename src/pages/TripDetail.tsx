@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Icon } from '../components/Icon';
 import { DayPicker, ErrorBox, Field, PlacesDatalist, Spinner } from '../components/ui';
 import { useAuth } from '../lib/auth';
 import { category } from '../lib/config';
@@ -40,10 +41,10 @@ export default function TripDetail() {
         .eq('trip_id', id!)
         .order('created_at', { ascending: false }),
     ]);
-    if (tripRes.error) setError(errorText(tripRes.error));
+    if (tripRes.error) setError(tripRes.error.code === 'PGRST116' ? t('td.notFound') : errorText(tripRes.error));
     else setTrip(tripRes.data as unknown as Trip);
     setProposals((propRes.data ?? []) as Proposal[]);
-  }, [id]);
+  }, [id, t]);
 
   useEffect(() => {
     load();
@@ -70,7 +71,16 @@ export default function TripDetail() {
     await load();
   }
 
-  if (error && !trip) return <ErrorBox message={error} />;
+  if (error && !trip) {
+    return (
+      <div className="stack">
+        <Link to="/" className="back">
+          {t('common.back')}
+        </Link>
+        <ErrorBox message={error} />
+      </div>
+    );
+  }
   if (!trip) return <Spinner />;
 
   const cat = category(trip.category);
@@ -92,7 +102,7 @@ export default function TripDetail() {
         <div className="trip-card-top">
           <span className={`badge kind-${trip.kind}`}>{isOffer ? t('tc.offer') : t('tc.request')}</span>
           <span className="muted small">
-            {cat.icon} {cat.label}
+            <Icon name={cat.icon} className="cat-ico" /> {cat.label}
           </span>
         </div>
         <h2 className="route big">
@@ -145,7 +155,14 @@ export default function TripDetail() {
                 </>
               ) : (
                 <>
-                  {trip.seats} · {hasDriver(trip) ? t('td.hasDriver') : t('td.seekingDriver')}
+                  {trip.seats} ·{' '}
+                  {hasDriver(trip) ? (
+                    <>
+                      <Icon name="check" className="ok-ico" /> {t('td.hasDriver')}
+                    </>
+                  ) : (
+                    t('td.seekingDriver')
+                  )}
                 </>
               )}
             </dd>
@@ -168,7 +185,7 @@ export default function TripDetail() {
             <ul className="tags">
               {trip.pickup_points.map((p) => (
                 <li key={p} className="tag">
-                  📍 {p}
+                  <Icon name="pin" /> {p}
                 </li>
               ))}
             </ul>
@@ -188,6 +205,7 @@ export default function TripDetail() {
       {isOwner ? (
         <section className="actions">
           <Link to={`/viaje/${trip.id}/editar`} className="btn">
+            <Icon name="edit" />
             {t('td.edit')}
           </Link>
           {active ? (
@@ -240,10 +258,18 @@ export default function TripDetail() {
                 disabled={isOffer && left === 0}
                 onClick={() => setPanel(panel === 'join' ? 'none' : 'join')}
               >
-                {isOffer ? (left === 0 ? t('td.tripFull') : t('td.join')) : t('td.drive')}
+                {isOffer && left === 0 ? (
+                  t('td.tripFull')
+                ) : (
+                  <>
+                    <Icon name={isOffer ? 'hand' : 'car'} />
+                    {isOffer ? t('td.join') : t('td.drive')}
+                  </>
+                )}
               </button>
             )}
             <button className="btn block" onClick={() => setPanel(panel === 'propose' ? 'none' : 'propose')}>
+              <Icon name="chat" />
               {t('td.propose')}
             </button>
           </section>
@@ -347,7 +373,7 @@ function PersonRow({ person, showContact }: { person?: Profile; showContact: boo
             href={`tel:${person.phone}`}
             aria-label={t('td.callAria', { name: person.full_name })}
           >
-            📞
+            <Icon name="phone" />
           </a>
           <a
             className="btn icon"
@@ -356,7 +382,7 @@ function PersonRow({ person, showContact }: { person?: Profile; showContact: boo
             rel="noreferrer"
             aria-label={t('td.whatsappAria', { name: person.full_name })}
           >
-            💬
+            <Icon name="chat" />
           </a>
         </span>
       )}
@@ -369,7 +395,12 @@ function CommitmentDetails({ c }: { c: Commitment }) {
   return (
     <div className="muted small">
       {c.role === 'pasajero' && tn('seats', c.seats)}
-      {c.pickup_point && ` · 📍 ${c.pickup_point}`}
+      {c.pickup_point && (
+        <>
+          {' '}
+          · <Icon name="pin" /> {c.pickup_point}
+        </>
+      )}
       {c.days_of_week && ` · ${fmtDays(c.days_of_week)}`}
       {c.note && <div>“{c.note}”</div>}
     </div>
@@ -447,7 +478,7 @@ function JoinForm({ trip, existing, onDone }: { trip: Trip; existing?: Commitmen
       </Field>
       <ErrorBox message={error} />
       <button className="btn primary block" disabled={busy}>
-        {busy ? t('common.sending') : existing ? t('common.save') : t('jf.send')}
+        {busy ? t('common.sending') : existing && existing.status !== 'cancelado' ? t('common.save') : t('jf.send')}
       </button>
       <p className="muted small">{t('jf.note')}</p>
     </form>

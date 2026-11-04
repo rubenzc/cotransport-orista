@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '../components/Icon';
 import TripCard from '../components/TripCard';
 import { Empty, ErrorBox, Segmented, Spinner } from '../components/ui';
 import { useAuth } from '../lib/auth';
@@ -62,15 +63,28 @@ export default function MyTrips() {
         value={tab}
         onChange={setTab}
         options={[
-          { value: 'organizo', label: pendingCount ? t('mt.organizeN', { n: pendingCount }) : t('mt.organize') },
+          {
+            value: 'organizo',
+            label: (
+              <>
+                {t('mt.organize')}
+                {pendingCount > 0 && <span className="count">{pendingCount}</span>}
+              </>
+            ),
+          },
           { value: 'apuntado', label: t('mt.joined') },
         ]}
       />
-      {tab === 'organizo' && pendingCount > 0 && <p className="notice">{tn('mt.notice', pendingCount)}</p>}
+      {tab === 'organizo' && pendingCount > 0 && (
+        <p className="notice">
+          <Icon name="bell" />
+          {tn('mt.notice', pendingCount)}
+        </p>
+      )}
       <ErrorBox message={error} />
       {!list && !error && <Spinner />}
       {list && list.length === 0 && (
-        <Empty icon={tab === 'organizo' ? '🚗' : '✋'} title={t('mt.empty')}>
+        <Empty icon={<Icon name={tab === 'organizo' ? 'car' : 'hand'} />} title={t('mt.empty')}>
           {tab === 'organizo' ? (
             <Link to="/nuevo" className="btn primary">
               {t('mt.publish')}

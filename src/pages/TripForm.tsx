@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Icon } from '../components/Icon';
 import { DayPicker, ErrorBox, Field, PlacesDatalist, Segmented, Spinner } from '../components/ui';
 import { useAuth } from '../lib/auth';
 import { CATEGORIES, category } from '../lib/config';
@@ -74,6 +75,8 @@ export default function TripForm() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [newPickup, setNewPickup] = useState('');
   const [loading, setLoading] = useState(editing);
+  // viaje inexistente o ajeno: se muestra solo el error, sin formulario
+  const [blocked, setBlocked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -98,9 +101,13 @@ export default function TripForm() {
         .eq('id', id!)
         .single()
         .then(({ data, error }) => {
-          if (error) setError(errorText(error));
-          else if ((data as Trip).owner_id !== userId) setError(t('tf.errOwner'));
-          else setForm(fromTrip(data as Trip));
+          if (error) {
+            setError(errorText(error));
+            setBlocked(true);
+          } else if ((data as Trip).owner_id !== userId) {
+            setError(t('tf.errOwner'));
+            setBlocked(true);
+          } else setForm(fromTrip(data as Trip));
           setLoading(false);
         });
     }
@@ -149,6 +156,17 @@ export default function TripForm() {
 
   if (loading) return <Spinner />;
 
+  if (blocked) {
+    return (
+      <div className="stack">
+        <Link to="/" className="back">
+          {t('common.back')}
+        </Link>
+        <ErrorBox message={error} />
+      </div>
+    );
+  }
+
   const isOffer = form.kind === 'oferta';
 
   return (
@@ -161,15 +179,31 @@ export default function TripForm() {
           value={form.kind}
           onChange={(v) => set('kind', v)}
           options={[
-            { value: 'oferta', label: t('tf.kindOffer') },
-            { value: 'peticion', label: t('tf.kindRequest') },
+            {
+              value: 'oferta',
+              label: (
+                <>
+                  <Icon name="car" />
+                  {t('tf.kindOffer')}
+                </>
+              ),
+            },
+            {
+              value: 'peticion',
+              label: (
+                <>
+                  <Icon name="hand" />
+                  {t('tf.kindRequest')}
+                </>
+              ),
+            },
           ]}
         />
         <Field label={t('tf.category')}>
           <select value={form.category} onChange={(e) => set('category', e.target.value)}>
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>
-                {c.icon} {category(c.value).label}
+                {category(c.value).label}
               </option>
             ))}
           </select>
@@ -212,7 +246,7 @@ export default function TripForm() {
           <ul className="tags">
             {form.pickup_points.map((p) => (
               <li key={p} className="tag">
-                📍 {p}
+                <Icon name="pin" /> {p}
                 <button
                   type="button"
                   aria-label={t('tf.removeAria', { name: p })}
@@ -325,11 +359,9 @@ export default function TripForm() {
       </section>
 
       <ErrorBox message={error} />
-      <div className="sticky-actions">
-        <button className="btn primary block" disabled={busy}>
-          {busy ? t('common.saving') : editing ? t('tf.saveChanges') : t('tf.publish')}
-        </button>
-      </div>
+      <button className="btn primary block big" disabled={busy}>
+        {busy ? t('common.saving') : editing ? t('tf.saveChanges') : t('tf.publish')}
+      </button>
     </form>
   );
 }

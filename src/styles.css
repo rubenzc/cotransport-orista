@@ -9,11 +9,11 @@
   --primary: #2f6b3c;
   --primary-ink: #ffffff;
   --primary-soft: #e1eedf;
-  --accent: #c4692b;
+  --accent: #9a4a17;
   --accent-soft: #f8e6d8;
-  --ok: #2f7d46;
+  --ok: #236337;
   --ok-soft: #dff1e4;
-  --warn: #9a6a00;
+  --warn: #785200;
   --warn-soft: #fbefcf;
   --danger: #b3261e;
   --danger-soft: #f9dedc;
@@ -59,6 +59,8 @@ body {
   background: var(--bg);
   color: var(--text);
   font: 17px/1.45 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* un texto largo sin espacios (p. ej. una URL) no debe ensanchar la página */
+  overflow-wrap: anywhere;
   -webkit-tap-highlight-color: transparent;
 }
 h1,
@@ -182,17 +184,19 @@ code {
   text-decoration: none;
 }
 .tab-icon {
-  font-size: 1.35rem;
-  filter: grayscale(1);
-  opacity: 0.7;
+  display: grid;
+  place-items: center;
+  width: 3.3rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  transition: background-color 0.15s;
 }
 .tab.active {
   color: var(--primary);
   font-weight: 600;
 }
 .tab.active .tab-icon {
-  filter: none;
-  opacity: 1;
+  background: var(--primary-soft);
 }
 .screen-center {
   min-height: 100dvh;
@@ -641,13 +645,6 @@ textarea:focus-visible,
 .actions > .btn {
   flex: 1;
 }
-.sticky-actions {
-  position: sticky;
-  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px) + 0.5rem);
-}
-.sticky-actions .btn {
-  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
-}
 .back {
   text-decoration: none;
   font-weight: 600;
@@ -706,7 +703,13 @@ textarea:focus-visible,
   padding: 2rem 1rem;
 }
 .empty-icon {
-  font-size: 2.5rem;
+  display: grid;
+  place-items: center;
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 .hello h2 {
   font-size: 1.6rem;
@@ -752,4 +755,71 @@ textarea:focus-visible,
 /* ===== Banner de Netlify (lo inyecta la plataforma) ===== */
 #nl-badge-frame {
   display: none !important;
+}
+
+/* ===== Iconos planos (SVG, heredan el color del texto) ===== */
+.ico {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  vertical-align: -0.2em;
+}
+.chip,
+.seg,
+.tag,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+.tag {
+  justify-content: flex-start;
+}
+.count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--primary-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-left: 0.35rem;
+}
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.trip-card-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.meta-ico {
+  color: var(--muted);
+  margin-right: 0.25rem;
+}
+.cat-ico {
+  color: var(--primary);
+}
+.btn .ico {
+  vertical-align: middle;
+}
+.person-name .ico {
+  color: var(--muted);
+}
+.tab-icon .ico {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+.empty-icon .ico {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+.ok-ico {
+  color: var(--ok);
 }

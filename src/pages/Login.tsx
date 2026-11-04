@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { Icon } from '../components/Icon';
 import { ErrorBox, Field, LangSwitch } from '../components/ui';
 import { TOWN, USERNAME_RE, usernameToEmail } from '../lib/config';
 import { useT } from '../lib/i18n';
@@ -90,7 +91,7 @@ export default function Login() {
               aria-pressed={showPassword}
               onClick={() => setShowPassword((v) => !v)}
             >
-              {showPassword ? '🙈' : '👁️'}
+              <Icon name={showPassword ? 'eyeOff' : 'eye'} />
             </button>
           </div>
         </Field>

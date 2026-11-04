@@ -1,3 +1,4 @@
+import type { IconName } from '../components/Icon';
 import { tr, type Key } from './i18n';
 
 // Ajustos del poble: edita aquests valors per adaptar l'app a una altra zona.
@@ -30,14 +31,14 @@ export const FREQUENT_PLACES = [
 
 // `value` és el que es desa a la base de dades; el text es tradueix amb `cat.<value>`.
 export const CATEGORIES = [
-  { value: 'trabajo', icon: '💼' },
-  { value: 'medico', icon: '🩺' },
-  { value: 'compras', icon: '🛒' },
-  { value: 'estudios', icon: '🎒' },
-  { value: 'tramites', icon: '📄' },
-  { value: 'ocio', icon: '🎉' },
-  { value: 'otro', icon: '🚗' },
-] as const;
+  { value: 'trabajo', icon: 'work' },
+  { value: 'medico', icon: 'medical' },
+  { value: 'compras', icon: 'shop' },
+  { value: 'estudios', icon: 'school' },
+  { value: 'tramites', icon: 'docs' },
+  { value: 'ocio', icon: 'party' },
+  { value: 'otro', icon: 'car' },
+] as const satisfies readonly { value: string; icon: IconName }[];
 
 // Dies ISO: 1 = dilluns … 7 = diumenge
 export const DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];

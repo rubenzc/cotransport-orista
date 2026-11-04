@@ -4,9 +4,9 @@ Web app de coche compartido entre vecinos de un pueblo sin transporte público. 
 
 ## Stack
 
-- Frontend: React 18, Vite y TypeScript (strict). Enrutado con `HashRouter` de react-router v6.
+- Frontend: React 18, Vite y TypeScript (strict). Enrutado con `HashRouter` de react-router v7 (se importa de `react-router-dom`). Iconos: `lucide-react`.
 - Backend: Supabase (Postgres, Auth con usuario y contraseña, Realtime). No hay servidor propio.
-- Estilos: un único `src/styles.css` con variables CSS. No se usa ninguna librería de UI.
+- Estilos: un único `src/styles.css` con variables CSS. No se usa ninguna librería de componentes de UI.
 
 ## Comandos
 
@@ -21,18 +21,25 @@ Web app de coche compartido entre vecinos de un pueblo sin transporte público. 
   - Fuera de componentes (formato de fechas, errores) se usa `tr()`, que lee el idioma actual. Todo componente que muestre texto debe llamar a `useT()` para repintarse al cambiar de idioma.
   - Los valores guardados en la base de datos (`oferta`, `peticion`, `trabajo`, `pendiente`…) siguen siendo identificadores internos en español; solo se traducen al mostrarlos.
   - Los errores de los triggers y RPC llegan como códigos `err_*` y se traducen con `errorText()` (claves `db.err_*`). Al añadir una excepción nueva en SQL, añade su clave en ambos idiomas.
-- Login por **usuario y contraseña**: se convierte a un email ficticio (`usernameToEmail` en `src/lib/config.ts`) porque Supabase exige uno. Requiere «Confirm email» desactivado y no hay recuperación por correo.
+- Login por **usuario y contraseña**: se convierte a un email ficticio (`usernameToEmail` en `src/lib/config.ts`) porque Supabase exige uno. Requiere «Confirm email» desactivado y no hay recuperación por correo: el administrador restablece o borra la cuenta desde Supabase (ver README, sección Administración). Al cerrar sesión se vuelve a `#/` para que la persona siguiente no herede la pantalla anterior.
 - El nombre del pueblo y los lugares frecuentes están en `src/lib/config.ts`.
+- **Iconos planos, nunca emojis.** En la interfaz se usa `<Icon name="…" />` (`src/components/Icon.tsx`, iconos de Lucide que heredan `currentColor`). Para añadir uno, impórtalo en ese archivo y regístralo en `ICONS`. Ni los textos de `locales/` ni el JSX llevan emojis.
+- **Contraste**: en modo claro y oscuro, todo texto debe llegar a 4,5:1 (WCAG AA). Al tocar colores de `styles.css`, recalcula los pares (texto/fondo de `.badge`, `.notice`, `.btn`, `.count`…).
+- Un texto escrito por el usuario (descripción, mensajes, nombres) puede traer una palabra o URL larguísima: `body` lleva `overflow-wrap: anywhere` para que no ensanche la página. No lo quites.
+- El botón de enviar de los formularios va **al final del formulario, sin posición fija** (en `TripForm` va debajo de la descripción).
+- Logo e iconos de la app: `public/icon.svg` (con esquinas) e `public/icon-maskable.svg` (a sangre completa, dibujo en la zona segura). Los PNG (`icon-192`, `icon-512`, `icon-maskable-512`, `apple-touch-icon`, `favicon-32`) se generan dibujando esos SVG en un canvas del navegador; si cambias el logo hay que regenerarlos. iOS necesita el `apple-touch-icon` sin transparencia.
+- Los mensajes de error de PostgREST/Postgres que llegan al usuario se traducen en `errorText()` (`PGRST116` = «no encontrado», `23503` = dato inexistente). Los formularios de edición de recursos ajenos o inexistentes muestran solo el error y un enlace para volver, sin el formulario.
 - Diseño **mobile-first**:
   - Áreas táctiles de al menos 44–48 px.
   - Inputs a 17 px para evitar el zoom automático de iOS.
   - Barra de navegación inferior fija que respeta las `safe-area-inset`.
 - Las reglas de negocio viven en la base de datos (`supabase/schema.sql`):
-  - Estados de los compromisos y control de plazas por día: trigger `commitments_guard`.
+  - Estados de los compromisos y control de plazas por día: trigger `commitments_guard` (además: los días de un compromiso deben ser del viaje, y un viaje cancelado es solo lectura salvo borrarse).
+  - Plazas nunca por debajo de las confirmadas y tipo de viaje bloqueado con gente apuntada: trigger `trips_guard`.
   - Aceptar o rechazar propuestas: RPC `respond_proposal` / `withdraw_proposal`.
   - Permisos: políticas RLS.
   - El frontend no debe duplicar ni sustituir estas reglas; solo las refleja en la interfaz.
-- Cualquier cambio de esquema se añade a `supabase/schema.sql`. Si el proyecto ya está desplegado, va además en un script de migración aparte en `supabase/`.
+- Cualquier cambio de esquema se añade a `supabase/schema.sql` (estado final, para instalaciones nuevas) **y** en un archivo numerado nuevo de `supabase/migrations/` (idempotente, para el proyecto ya desplegado). El administrador ejecuta la migración a mano en el SQL Editor de Supabase; hay que avisarle.
 - Días de la semana en formato ISO: 1 = lunes … 7 = domingo. Las fechas se guardan como `date` (YYYY-MM-DD) y las horas como `time`.
 - Las consultas con joins usan `TRIP_SELECT` de `src/lib/supabase.ts`. El resultado se convierte con `as unknown as Trip`, porque el parser de tipos de supabase-js no entiende el select concatenado.
 

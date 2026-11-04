@@ -77,7 +77,8 @@ create table public.commitments (
   role          text not null default 'pasajero' check (role in ('pasajero', 'conductor')),
   seats         smallint not null default 1 check (seats between 1 and 8),
   pickup_point  text,
-  days_of_week  smallint[],          -- en viajes recurrentes: solo algunos días (null = todos)
+  days_of_week  smallint[]           -- en viajes recurrentes: solo algunos días (null = todos)
+                check (days_of_week is null or days_of_week <@ array[1,2,3,4,5,6,7]::smallint[]),
   note          text,
   status        text not null default 'pendiente'
                 check (status in ('pendiente', 'confirmado', 'rechazado', 'cancelado')),
@@ -137,6 +138,14 @@ begin
   select * into t from public.trips where id = new.trip_id;
   is_owner := (auth.uid() = t.owner_id);
 
+  -- los días de un compromiso solo existen en viajes semanales y deben ser días del viaje
+  if t.schedule = 'puntual' then
+    new.days_of_week := null;
+  elsif new.days_of_week is not null
+        and (cardinality(new.days_of_week) = 0 or not (new.days_of_week <@ t.days_of_week)) then
+    raise exception 'err_days_not_in_trip';
+  end if;
+
   if tg_op = 'INSERT' then
     if new.user_id = t.owner_id then
       raise exception 'err_own_trip';
@@ -151,6 +160,11 @@ begin
       raise exception 'err_move_commitment';
     end if;
     new.role := old.role;
+
+    -- en un viaje cancelado solo se permite que cada persona cancele su solicitud
+    if t.status <> 'activo' and new.status <> 'cancelado' then
+      raise exception 'err_trip_cancelled';
+    end if;
 
     if is_owner then
       -- quien organiza solo cambia el estado
@@ -196,6 +210,43 @@ end $$;
 
 create trigger commitments_guard before insert or update on public.commitments
   for each row execute function public.commitments_guard();
+
+-- Reglas de negocio de los viajes: no se pueden bajar las plazas por debajo de las ya
+-- confirmadas ni cambiar el tipo de viaje (oferta/petición) cuando ya hay gente apuntada.
+create or replace function public.trips_guard() returns trigger
+language plpgsql security definer set search_path = public as $$
+declare
+  max_used int;
+begin
+  if new.kind is distinct from old.kind
+     and exists (select 1 from public.commitments c
+                 where c.trip_id = new.id and c.status in ('pendiente', 'confirmado')) then
+    raise exception 'err_kind_locked';
+  end if;
+
+  if new.kind = 'oferta'
+     and (new.seats is distinct from old.seats or new.days_of_week is distinct from old.days_of_week) then
+    select coalesce(max(used), 0) into max_used
+    from (
+      select d, sum(c.seats) as used
+      from unnest(coalesce(new.days_of_week, array[0]::smallint[])) as d
+      join public.commitments c
+        on c.trip_id = new.id
+       and c.status = 'confirmado'
+       and c.role = 'pasajero'
+       and (c.days_of_week is null or d = any(c.days_of_week))
+      group by d
+    ) s;
+    if max_used > new.seats then
+      raise exception 'err_seats_below_confirmed';
+    end if;
+  end if;
+
+  return new;
+end $$;
+
+create trigger trips_guard before update on public.trips
+  for each row execute function public.trips_guard();
 
 -- =====================================================================
 -- Funciones RPC para propuestas de cambio

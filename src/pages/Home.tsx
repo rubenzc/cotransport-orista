@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '../components/Icon';
 import TripCard from '../components/TripCard';
 import { Empty, ErrorBox, Segmented, Spinner } from '../components/ui';
 import { useAuth } from '../lib/auth';
@@ -89,7 +90,7 @@ export default function Home() {
               className={cat === c.value ? 'chip on' : 'chip'}
               onClick={() => setCat(cat === c.value ? '' : c.value)}
             >
-              {c.icon} {category(c.value).label}
+              <Icon name={c.icon} /> {category(c.value).label}
             </button>
           ))}
         </div>
@@ -103,7 +104,7 @@ export default function Home() {
       {!trips && !error && <Spinner />}
 
       {trips && visible.length === 0 && (
-        <Empty icon="🚙" title={t('home.empty')}>
+        <Empty icon={<Icon name="car" />} title={t('home.empty')}>
           <p className="muted">{t('home.emptyHint')}</p>
           <Link to="/nuevo" className="btn primary">
             {t('home.publish')}

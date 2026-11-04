@@ -3,6 +3,7 @@ import { category } from '../lib/config';
 import { commitmentLabel, fmtDate, fmtTime, hasDriver, nextOccurrence, seatsLeft, whenLabel } from '../lib/format';
 import { useT } from '../lib/i18n';
 import type { Trip } from '../lib/types';
+import { Icon } from './Icon';
 
 export default function TripCard({ trip, userId }: { trip: Trip; userId: string }) {
   const { t, tn } = useT();
@@ -17,7 +18,7 @@ export default function TripCard({ trip, userId }: { trip: Trip; userId: string 
       <div className="trip-card-top">
         <span className={`badge kind-${trip.kind}`}>{trip.kind === 'oferta' ? t('tc.offer') : t('tc.request')}</span>
         <span className="muted small">
-          {cat.icon} {cat.label}
+          <Icon name={cat.icon} className="cat-ico" /> {cat.label}
         </span>
       </div>
 
@@ -32,7 +33,7 @@ export default function TripCard({ trip, userId }: { trip: Trip; userId: string 
       <div className="trip-card-meta">
         <span className="time">{fmtTime(trip.departure_time)}</span>
         <span>
-          {trip.schedule === 'recurrente' ? '🔁 ' : '📅 '}
+          <Icon name={trip.schedule === 'recurrente' ? 'repeat' : 'calendar'} className="meta-ico" />
           {whenLabel(trip)}
           {trip.schedule === 'recurrente' && next && (
             <span className="muted"> · {t('tc.next', { date: fmtDate(next) })}</span>
@@ -58,6 +59,7 @@ export default function TripCard({ trip, userId }: { trip: Trip; userId: string 
 
       {(mine || joined) && (
         <div className="trip-card-flag">
+          <Icon name={mine ? 'star' : 'hand'} />
           {mine ? t('tc.mine') : t('tc.joined', { status: commitmentLabel(joined!.status) })}
         </div>
       )}

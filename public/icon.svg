@@ -1,1 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#2f6b3c"/><path d="M128 300l28-84c6-18 22-28 40-28h120c18 0 34 10 40 28l28 84" fill="none" stroke="#fff" stroke-width="28" stroke-linejoin="round"/><rect x="104" y="290" width="304" height="90" rx="28" fill="#fff"/><circle cx="168" cy="335" r="20" fill="#2f6b3c"/><circle cx="344" cy="335" r="20" fill="#2f6b3c"/><rect x="140" y="380" width="44" height="36" rx="10" fill="#fff"/><rect x="328" y="380" width="44" height="36" rx="10" fill="#fff"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Cotransport Oristà">
+  <rect width="512" height="512" rx="112" fill="#2f6b3c"/>
+  <!-- hoja que brota del techo -->
+  <path d="M236 206C206 128 248 66 340 54C356 138 318 206 236 206Z" fill="#bfe6ae"/>
+  <path d="M238 204C268 150 300 108 332 66" fill="none" stroke="#2f6b3c" stroke-width="9" stroke-linecap="round"/>
+  <!-- coche -->
+  <path d="M146 300L186 226C194 212 206 206 222 206H300C316 206 328 212 338 226L378 300Z" fill="#ffffff"/>
+  <rect x="86" y="290" width="340" height="100" rx="42" fill="#ffffff"/>
+  <path d="M180 290L204 240H244V290Z" fill="#2f6b3c"/>
+  <path d="M264 240H298C304 240 308 243 312 248L338 290H264Z" fill="#2f6b3c"/>
+  <!-- ruedas -->
+  <circle cx="176" cy="392" r="52" fill="#2f6b3c"/>
+  <circle cx="176" cy="392" r="40" fill="#ffffff"/>
+  <circle cx="176" cy="392" r="15" fill="#2f6b3c"/>
+  <circle cx="338" cy="392" r="52" fill="#2f6b3c"/>
+  <circle cx="338" cy="392" r="40" fill="#ffffff"/>
+  <circle cx="338" cy="392" r="15" fill="#2f6b3c"/>
+</svg>
