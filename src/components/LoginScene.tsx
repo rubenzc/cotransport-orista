@@ -1,15 +1,27 @@
 /**
  * Ilustración de la pantalla de acceso: el coche con la hoja de la marca, circulando por una carretera
- * al pie del puig de Sant Sebastià (ermita y mirador) con la plana de Osona detrás.
+ * al pie del puig de Sant Sebastià, con su ermita de piedra (campanario cuadrado adosado, tejado de teja,
+ * ojo de buey y puerta de madera) rodeada de pinos, y la plana de Osona detrás.
  *
- * Es decorativa (aria-hidden) y no tiene fondo propio: el cielo es el del tema. Todos los colores salen de
- * las variables `--ill-*` de styles.css, que tienen valores distintos en claro y en oscuro
- * (de día: sol; de noche: luna y estrellas).
+ * Es decorativa (aria-hidden) y no tiene fondo propio: el cielo es el del tema. Los colores salen de las
+ * variables `--ill-*` de styles.css, con valores distintos en claro y en oscuro (de día: sol; de noche:
+ * luna, estrellas y ventanas encendidas). El paisaje se desvanece hacia abajo con una máscara SVG; el
+ * coche queda fuera de la máscara para que no pierda nitidez.
  */
 export default function LoginScene() {
   return (
     <div className="login-scene" aria-hidden="true">
-      <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" focusable="false">
+      <svg viewBox="0 0 400 246" preserveAspectRatio="xMidYMax slice" focusable="false">
+        <defs>
+          <linearGradient id="il-fade-grad" gradientUnits="userSpaceOnUse" x1="0" y1="204" x2="0" y2="250">
+            <stop offset="0" stopColor="#fff" />
+            <stop offset="1" stopColor="#000" />
+          </linearGradient>
+          <mask id="il-fade" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="260">
+            <rect width="400" height="260" fill="url(#il-fade-grad)" />
+          </mask>
+        </defs>
+
         {/* cielo: sol de día, luna y estrellas de noche */}
         <g className="il-sun">
           <circle cx="226" cy="54" r="31" className="il-sun-halo" />
@@ -22,9 +34,9 @@ export default function LoginScene() {
           <circle cx="112" cy="58" r="1.2" className="il-star" />
           <circle cx="168" cy="26" r="1.8" className="il-star" />
           <circle cx="300" cy="62" r="1.2" className="il-star" />
-          <circle cx="352" cy="40" r="1.5" className="il-star" />
           <circle cx="24" cy="78" r="1.2" className="il-star" />
           <circle cx="372" cy="104" r="1.4" className="il-star" />
+          <circle cx="352" cy="40" r="1.5" className="il-star" />
           <circle cx="168" cy="84" r="1.1" className="il-star" />
         </g>
         <g className="il-cloud">
@@ -32,53 +44,59 @@ export default function LoginScene() {
           <path transform="translate(196 -8)" d="M150 48h40a8 8 0 0 0 0-16 11 11 0 0 0-21-2 9 9 0 0 0-19 18Z" />
         </g>
 
-        {/* montañas lejanas (Montseny, Cadí) y plana de Osona */}
-        <path className="il-far" d="M0 150c28-22 52-12 76-26 22-13 36-30 62-22 22 7 30 22 52 18 26-5 34-30 62-32 24-2 30 20 52 22 24 3 34-10 56-6v156H0Z" />
-        <path className="il-mid" d="M0 176c44-14 96-8 150-14s118-12 170-6c32 4 62 10 80 8v96H0Z" />
-        <path className="il-field-a" d="M18 196l62-10 26 7-66 12Z" />
-        <path className="il-field-b" d="M118 190l70-9 22 6-72 11Z" />
-        <path className="il-field-a" d="M214 186l52-6 20 5-56 9Z" />
-        <path className="il-mid2" d="M0 198c70-14 142-6 214-12s126-8 186-2v76H0Z" />
-        <path className="il-field-b" d="M40 214l78-8 24 6-86 10Z" />
+        <g mask="url(#il-fade)">
+          {/* montañas lejanas (Montseny, Cadí) y plana de Osona */}
+          <path className="il-far" d="M0 150c28-22 52-12 76-26 22-13 36-30 62-22 22 7 30 22 52 18 26-5 34-30 62-32 24-2 30 20 52 22 24 3 34-10 56-6v156H0Z" />
+          <path className="il-mid" d="M0 176c44-14 96-8 150-14s118-12 170-6c32 4 62 10 80 8v96H0Z" />
+          <path className="il-field-a" d="M18 196l62-10 26 7-66 12Z" />
+          <path className="il-field-b" d="M118 190l70-9 22 6-72 11Z" />
+          <path className="il-field-a" d="M214 186l52-6 20 5-56 9Z" />
+          <path className="il-mid2" d="M0 198c70-14 142-6 214-12s126-8 186-2v76H0Z" />
+          <path className="il-field-b" d="M40 212l78-8 24 6-86 10Z" />
 
-        {/* puig de Sant Sebastià con la ermita y el mirador */}
-        <path className="il-near" d="M176 224c34-22 62-62 96-92 16-14 36-18 52-8 14 9 22 28 36 44 12 15 28 24 40 28v64H176Z" />
-        <path className="il-near-shade" d="M296 124c14 8 22 26 34 40 12 16 28 26 42 30l28 14v-20c-14-5-28-14-40-28-14-16-22-35-36-44-8-5-18-6-28-2Z" />
+          {/* puig de Sant Sebastià */}
+          <path className="il-near" d="M176 224c34-22 62-62 96-92 16-14 36-18 52-8 14 9 22 28 36 44 12 15 28 24 40 28v64H176Z" />
+          <path className="il-near-shade" d="M296 124c14 8 22 26 34 40 12 16 28 26 42 30l28 14v-20c-14-5-28-14-40-28-14-16-22-35-36-44-8-5-18-6-28-2Z" />
 
-        <g className="il-tree">
-          <ellipse cx="238" cy="158" rx="6" ry="13" />
-          <ellipse cx="250" cy="166" rx="5" ry="11" />
-          <ellipse cx="354" cy="158" rx="5" ry="11" />
-          <ellipse cx="366" cy="170" rx="6" ry="12" />
+          {/* pinos piñoneros a la izquierda y abeto a la derecha, como en la ermita */}
+          <g className="il-tree">
+            <rect x="241.4" y="146" width="1.8" height="14" />
+            <ellipse cx="242.3" cy="144" rx="10" ry="4.6" />
+            <rect x="256.4" y="152" width="1.6" height="12" />
+            <ellipse cx="257.2" cy="150" rx="8" ry="3.8" />
+            <path d="M350 138l-9 0 9-30 9 30Z" />
+            <path d="M350 138l-12 0 12-22 12 22Z" />
+            <path d="M372 164l-7 0 7-24 7 24Z" />
+          </g>
+
+          {/* ermita de piedra: nave con tejado a dos aguas, campanario cuadrado adosado con tejado piramidal */}
+          <rect className="il-stone-shade" x="303" y="115" width="27" height="17" />
+          <path className="il-roof-shade" d="M300 113l32 5v3l-32-5Z" />
+          <rect className="il-stone" x="276" y="112" width="28" height="20" />
+          <path className="il-roof" d="M272 113 290 101l18 12Z" />
+          <rect className="il-roof-shade" x="272" y="112" width="36" height="2" />
+          <circle className="il-window" cx="290" cy="119" r="2.3" />
+          <rect className="il-stone-shade" x="285.4" y="121" width="9.2" height="2.2" />
+          <rect className="il-door" x="287" y="123.2" width="6" height="8.8" />
+
+          <rect className="il-stone" x="265" y="84" width="12" height="48" />
+          <rect className="il-stone-shade" x="272.4" y="84" width="4.6" height="48" />
+          <path className="il-roof" d="M262.6 85.5 271 74l8.4 11.5Z" />
+          <path className="il-roof-shade" d="M271 74l8.4 11.5H271Z" />
+          <path className="il-cross" d="M271 74V66M268 69h6" fill="none" strokeWidth="1.3" strokeLinecap="round" />
+          <path className="il-window" d="M267.2 95.6v-3.4a1.6 1.6 0 0 1 3.2 0v3.4Z" />
+          <path className="il-window" d="M272 95.6v-3.4a1.6 1.6 0 0 1 3.2 0v3.4Z" />
+
+          {/* prado y carretera */}
+          <g transform="translate(0 -26)">
+            <path className="il-front" d="M0 226c56-12 124-6 196-10s150-8 204 0v44H0Z" />
+            <path className="il-road" d="M0 240c92-10 204-4 400-12v14c-196 12-308 6-400 18Z" />
+            <path className="il-road-line" d="M10 246c44-4 74-5 110-6l2 2c-36 1-64 3-108 8Zm148-8c40-1 74-2 104-3l1 2c-30 1-64 2-103 5Zm162-3c26-1 52-2 80-4l1 2c-28 2-54 3-79 5Z" />
+          </g>
         </g>
 
-        {/* ermita: nave única, ábside cuadrado, tejado a dos aguas */}
-        <rect className="il-stone" x="268" y="110" width="32" height="22" />
-        <rect className="il-stone-shade" x="300" y="116" width="9" height="16" />
-        <path className="il-roof" d="M264 111 284 96l20 15Z" />
-        <path className="il-roof-shade" d="M300 117l5-4 5 4Z" />
-        <rect className="il-door" x="281" y="121" width="7" height="11" rx="3.5" />
-        <rect className="il-window" x="272" y="116" width="3" height="5" rx="1.5" />
-
-        {/* mirador: torre de piedra con plataforma almenada */}
-        <rect className="il-stone" x="316" y="96" width="18" height="44" />
-        <rect className="il-stone-shade" x="327" y="96" width="7" height="44" />
-        <rect className="il-stone" x="312" y="90" width="26" height="7" />
-        <g className="il-stone">
-          <rect x="312" y="84" width="5" height="7" />
-          <rect x="321" y="84" width="5" height="7" />
-          <rect x="330" y="84" width="5" height="7" />
-        </g>
-        <rect className="il-window" x="323" y="106" width="3.2" height="9" rx="1.6" />
-        <rect className="il-window" x="323" y="122" width="3.2" height="9" rx="1.6" />
-
-        {/* prado y carretera */}
-        <path className="il-front" d="M0 226c56-12 124-6 196-10s150-8 204 0v44H0Z" />
-        <path className="il-road" d="M0 240c92-10 204-4 400-12v14c-196 12-308 6-400 18Z" />
-        <path className="il-road-line" d="M10 246c44-4 74-5 110-6l2 2c-36 1-64 3-108 8Zm148-8c40-1 74-2 104-3l1 2c-30 1-64 2-103 5Zm162-3c26-1 52-2 80-4l1 2c-28 2-54 3-79 5Z" />
-
-        {/* coche con la hoja de la marca */}
-        <g transform="translate(16 124) scale(0.26)">
+        {/* coche con la hoja de la marca, algo a la izquierda del centro */}
+        <g transform="translate(66 100) scale(0.26)">
           <path className="il-leaf" d="M236 206C206 128 248 66 340 54C356 138 318 206 236 206Z" />
           <path className="il-leaf-vein" d="M238 204C268 150 300 108 332 66" fill="none" strokeWidth="9" strokeLinecap="round" />
           <path className="il-car" d="M146 300L186 226C194 212 206 206 222 206H300C316 206 328 212 338 226L378 300Z" />

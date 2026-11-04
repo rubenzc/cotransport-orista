@@ -35,15 +35,16 @@
   --ill-near: #5b9462;
   --ill-near-shade: #4a8253;
   --ill-tree: #2f6b3c;
-  --ill-stone: #e4dcc8;
-  --ill-stone-shade: #c9bfa6;
+  --ill-stone: #cdbd9f;
+  --ill-stone-shade: #a99878;
   --ill-roof: #b5603a;
   --ill-roof-shade: #8f4a2c;
-  --ill-door: #5a4a3a;
-  --ill-window: #5a4a3a;
+  --ill-door: #6a4a30;
+  --ill-window: #4a3b2e;
   --ill-front: #3f7d4b;
   --ill-road: #3b4b40;
   --ill-road-line: #e9eddc;
+  --ill-iron: #3b3328;
   --ill-car: #ffffff;
   --ill-win: #2f6b3c;
   --ill-tire: #263329;
@@ -86,15 +87,16 @@
     --ill-near: #30503a;
     --ill-near-shade: #284631;
     --ill-tree: #17301f;
-    --ill-stone: #a39d88;
-    --ill-stone-shade: #7f7a68;
-    --ill-roof: #8f4f35;
-    --ill-roof-shade: #6e3b27;
-    --ill-door: #1a1d18;
+    --ill-stone: #968a72;
+    --ill-stone-shade: #706652;
+    --ill-roof: #86492f;
+    --ill-roof-shade: #66351f;
+    --ill-door: #2b1f15;
     --ill-window: #f1c25b;
     --ill-front: #1c2e22;
     --ill-road: #0f1511;
     --ill-road-line: #4a5b4d;
+    --ill-iron: #c9c3b0;
     --ill-car: #f2f6ef;
     --ill-win: #1f3a28;
     --ill-tire: #0f1511;
@@ -134,15 +136,16 @@
   --ill-near: #30503a;
   --ill-near-shade: #284631;
   --ill-tree: #17301f;
-  --ill-stone: #a39d88;
-  --ill-stone-shade: #7f7a68;
-  --ill-roof: #8f4f35;
-  --ill-roof-shade: #6e3b27;
-  --ill-door: #1a1d18;
+  --ill-stone: #968a72;
+  --ill-stone-shade: #706652;
+  --ill-roof: #86492f;
+  --ill-roof-shade: #66351f;
+  --ill-door: #2b1f15;
   --ill-window: #f1c25b;
   --ill-front: #1c2e22;
   --ill-road: #0f1511;
   --ill-road-line: #4a5b4d;
+  --ill-iron: #c9c3b0;
   --ill-car: #f2f6ef;
   --ill-win: #1f3a28;
   --ill-tire: #0f1511;
@@ -994,12 +997,10 @@ button,
 .login-scene {
   width: 100%;
   /* en pantallas anchas conserva sus proporciones (no se recorta) y se desvanece por los lados */
-  max-width: calc(var(--scene-h) * 1.6);
+  max-width: calc(var(--scene-h) * 1.65);
   margin-inline: auto;
   height: var(--scene-h);
-  /* el prado se funde con el fondo de la página: sin recuadro ni bordes */
-  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  /* sin recuadro ni bordes: el paisaje se desvanece hacia abajo con una máscara dentro del SVG */
 }
 .login-scene svg {
   display: block;
@@ -1008,12 +1009,8 @@ button,
 }
 @media (min-width: 760px) {
   .login-scene {
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
-      linear-gradient(to bottom, #000 70%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
-      linear-gradient(to bottom, #000 70%, transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
   }
 }
 .login-hero {
@@ -1107,6 +1104,9 @@ button,
 }
 .il-leaf {
   fill: var(--ill-leaf);
+}
+.il-cross {
+  stroke: var(--ill-iron);
 }
 .il-leaf-vein {
   stroke: var(--ill-leaf-vein);
