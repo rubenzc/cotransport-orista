@@ -1,4 +1,4 @@
-﻿# Cotransport Oristà
+# Cotransport Oristà
 
 Web app de coche compartido entre vecinos de un pueblo sin transporte público. El uso principal es desde el navegador del móvil.
 
@@ -26,7 +26,6 @@ Web app de coche compartido entre vecinos de un pueblo sin transporte público. 
 - **Iconos planos, nunca emojis.** En la interfaz se usa `<Icon name="…" />` (`src/components/Icon.tsx`, iconos de Lucide que heredan `currentColor`). Para añadir uno, impórtalo en ese archivo y regístralo en `ICONS`. Ni los textos de `locales/` ni el JSX llevan emojis.
 - **Tema claro/oscuro**: `src/lib/theme.ts`. «Automático» no fija nada y manda `prefers-color-scheme`; «Claro»/«Oscuro» ponen `<html data-theme>` y ganan sobre el dispositivo. Un script en `index.html` lo aplica antes de pintar (sin parpadeo). En `styles.css` los colores oscuros están en **dos bloques que deben tener los mismos valores** (`@media … :root:not([data-theme='light'])` y `:root[data-theme='dark']`).
 - En la pantalla de acceso el idioma va como `LangLinks` (enlaces discretos bajo el formulario: contraste ≥ 4,5:1, zona de 44 px, `lang` en cada opción, `aria-pressed`); el selector segmentado `LangSwitch` solo se usa en el Perfil.
-- Ilustración de la pantalla de acceso: `src/components/LoginScene.tsx` (SVG inline, decorativo, sin fondo propio). Representa el puig de Sant Sebastià con su ermita de piedra (campanario cuadrado adosado con tejado piramidal y cruz, ojo de buey y puerta de madera, según fotos de la ermita) y el coche con la hoja de la marca. Sus colores son variables `--ill-*` con valores de día (`:root`) y de noche (los **dos** bloques oscuros): de día se ve el sol, de noche la luna, las estrellas y las ventanas del mirador encendidas. Es una interpretación simplificada de la ermita real. El alto se adapta a la pantalla (`--scene-h` en `.login`) y los bordes se funden con el fondo mediante `mask-image`.
 - **Contraste**: en modo claro y oscuro, todo texto debe llegar a 4,5:1 (WCAG AA). Al tocar colores de `styles.css`, recalcula los pares (texto/fondo de `.badge`, `.notice`, `.btn`, `.count`…).
 - Un texto escrito por el usuario (descripción, mensajes, nombres) puede traer una palabra o URL larguísima: `body` lleva `overflow-wrap: anywhere` para que no ensanche la página. No lo quites.
 - El botón de enviar de los formularios va **al final del formulario, sin posición fija** (en `TripForm` va debajo de la descripción).
