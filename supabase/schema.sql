@@ -24,6 +24,8 @@ create table public.vehicles (
   model       text not null,
   color       text,
   seats       smallint not null default 4 check (seats between 1 and 8),
+  smoking     boolean not null default false,  -- se puede fumar en el coche
+  pets        boolean not null default false,  -- admite mascotas
   notes       text,
   created_at  timestamptz not null default now()
 );
@@ -48,6 +50,7 @@ create table public.trips (
   departure_time  time not null,
   return_time     time,
   duration_min    smallint check (duration_min > 0),
+  distance_km     numeric(6,1) check (distance_km > 0 and distance_km <= 1000),  -- km del recorrido (coste = km x tarifa)
   seats           smallint not null check (seats between 1 and 8),
   vehicle_id      uuid references public.vehicles(id) on delete set null,
   description     text,

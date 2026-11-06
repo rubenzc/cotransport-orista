@@ -897,3 +897,39 @@ button,
 .badge {
   overflow-wrap: normal;
 }
+
+/* ===== Normas del coche y coste ===== */
+.rules {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.rules .check {
+  min-height: 44px;
+}
+.rule-tags {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.rule-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.trip-card-cost {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+.facts .fact-wide {
+  grid-column: 1 / -1;
+}

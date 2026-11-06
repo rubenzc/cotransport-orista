@@ -10,6 +10,8 @@ Web app para que los vecinos de un pueblo sin transporte público compartan coch
 - **Datos de cada viaje**: tipo de trayecto (trabajo, médico, compras, estudios…), origen, destino, puntos de recogida, fecha concreta o días de la semana (con fecha de fin opcional), hora de salida, hora de vuelta, duración, plazas o personas, vehículo y descripción.
 - **Apuntarse** a un viaje: plazas necesarias, punto de recogida, días concretos (en viajes semanales) y un mensaje. Quien organiza **confirma o rechaza** cada solicitud. El sistema no deja confirmar más plazas de las que hay, día a día.
 - **Proponer cambios** (otra hora, otra fecha, otros días o un nuevo punto de recogida). Si quien organiza acepta la propuesta, el cambio se aplica al viaje automáticamente.
+- **Normas del vehículo**: al añadir un coche se indica si se puede fumar y si admite mascotas (por defecto, no). Se ven en la ficha del viaje.
+- **Gastos compartidos**: quien organiza indica los kilómetros del recorrido y la app calcula el coste (km × 0,26 €/km, tarifa de 2026 definida en `KM_RATE` de `src/lib/config.ts`; hay que revisarla cada año). La tarjeta del viaje muestra el coste por persona, que baja a medida que se confirman pasajeros: el total se reparte entre quien conduce y los pasajeros confirmados, hasta las plazas del vehículo. Es orientativo; el dinero se arregla entre vecinos.
 - **Contacto directo** por teléfono o WhatsApp desde la ficha del viaje.
 - **Mis viajes**: los que organizas (con aviso de solicitudes pendientes) y a los que te has apuntado.
 - La ficha del viaje **se actualiza en tiempo real** cuando otro vecino hace algo.
@@ -78,7 +80,7 @@ Todo se hace desde el panel de Supabase, porque la app no tiene perfil de admini
 
    Si la persona tenía la app abierta en el móvil, verá un aviso de que su cuenta ya no existe y podrá cerrar sesión y volver a registrarse con el mismo nombre de usuario.
 
-**Actualizar la base de datos tras un cambio.** Cuando salga un archivo nuevo en `supabase/migrations/`, pégalo en *SQL Editor* y ejecútalo una vez. El archivo `schema.sql` siempre refleja el estado final, para instalaciones nuevas.
+**Actualizar la base de datos tras un cambio.** Cuando salga un archivo nuevo en `supabase/migrations/` (ahora hay que ejecutar `002_vehicle_prefs_and_distance.sql`), pégalo en *SQL Editor* y ejecútalo una vez. El archivo `schema.sql` siempre refleja el estado final, para instalaciones nuevas.
 
 ## Adaptar a otro pueblo
 

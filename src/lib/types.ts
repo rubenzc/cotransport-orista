@@ -15,6 +15,8 @@ export interface Vehicle {
   model: string;
   color: string | null;
   seats: number;
+  smoking: boolean;
+  pets: boolean;
   notes: string | null;
 }
 
@@ -48,6 +50,7 @@ export interface Trip {
   departure_time: string;
   return_time: string | null;
   duration_min: number | null;
+  distance_km: number | null;
   seats: number;
   vehicle_id: string | null;
   description: string | null;

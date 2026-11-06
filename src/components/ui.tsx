@@ -162,6 +162,23 @@ export function ThemeSwitch() {
   );
 }
 
+/** Normes del cotxe: fumadors i mascotes, amb icona i text (mai només color). */
+export function VehicleRules({ vehicle }: { vehicle: { smoking: boolean; pets: boolean } }) {
+  const { t } = useT();
+  return (
+    <ul className="rule-tags">
+      <li>
+        <Icon name={vehicle.smoking ? 'smoke' : 'noSmoke'} />
+        {vehicle.smoking ? t('vh.smokingYes') : t('vh.smokingNo')}
+      </li>
+      <li>
+        <Icon name="paw" />
+        {vehicle.pets ? t('vh.petsYes') : t('vh.petsNo')}
+      </li>
+    </ul>
+  );
+}
+
 export function Spinner({ label }: { label?: string }) {
   const { t } = useT();
   return (

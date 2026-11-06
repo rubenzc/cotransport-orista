@@ -1,9 +1,12 @@
 import {
   Backpack,
+  Banknote,
   Bell,
   Briefcase,
   CalendarDays,
   Car,
+  Cigarette,
+  CigaretteOff,
   CircleCheck,
   ClipboardList,
   Eye,
@@ -18,10 +21,12 @@ import {
   MonitorSmartphone,
   Moon,
   PartyPopper,
+  PawPrint,
   Pencil,
   Phone,
   Plus,
   Repeat,
+  Route,
   ShoppingCart,
   Star,
   Stethoscope,
@@ -59,6 +64,11 @@ const ICONS = {
   sun: Sun,
   moon: Moon,
   auto: MonitorSmartphone,
+  smoke: Cigarette,
+  noSmoke: CigaretteOff,
+  paw: PawPrint,
+  money: Banknote,
+  route: Route,
 };
 
 export type IconName = keyof typeof ICONS;

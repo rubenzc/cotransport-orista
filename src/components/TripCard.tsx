@@ -1,6 +1,16 @@
 import { Link } from 'react-router-dom';
 import { category } from '../lib/config';
-import { commitmentLabel, fmtDate, fmtTime, hasDriver, nextOccurrence, seatsLeft, whenLabel } from '../lib/format';
+import {
+  commitmentLabel,
+  costPerPerson,
+  fmtDate,
+  fmtMoney,
+  fmtTime,
+  hasDriver,
+  nextOccurrence,
+  seatsLeft,
+  whenLabel,
+} from '../lib/format';
 import { useT } from '../lib/i18n';
 import type { Trip } from '../lib/types';
 import { Icon } from './Icon';
@@ -12,6 +22,7 @@ export default function TripCard({ trip, userId }: { trip: Trip; userId: string 
   const mine = trip.owner_id === userId;
   const joined = (trip.commitments ?? []).find((c) => c.user_id === userId && c.status !== 'cancelado');
   const left = seatsLeft(trip);
+  const each = costPerPerson(trip);
 
   return (
     <Link to={`/viaje/${trip.id}`} className={`card trip-card ${trip.kind}`}>
@@ -40,6 +51,13 @@ export default function TripCard({ trip, userId }: { trip: Trip; userId: string 
           )}
         </span>
       </div>
+
+      {each !== null && (
+        <div className="trip-card-cost">
+          <Icon name="money" className="meta-ico" />
+          <strong>{t('tc.perPerson', { amount: fmtMoney(each) })}</strong>
+        </div>
+      )}
 
       <div className="trip-card-bottom">
         <span className="muted small">

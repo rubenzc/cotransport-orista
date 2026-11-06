@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Icon } from '../components/Icon';
-import { ErrorBox, Field, LangSwitch, ThemeSwitch } from '../components/ui';
+import { ErrorBox, Field, LangSwitch, ThemeSwitch, VehicleRules } from '../components/ui';
 import { useAuth } from '../lib/auth';
 import { emailToUsername } from '../lib/config';
 import { useT } from '../lib/i18n';
@@ -103,6 +103,7 @@ export default function ProfilePage() {
                   {t('common.remove')}
                 </button>
               </div>
+              <VehicleRules vehicle={v} />
               {v.notes && <p className="muted small">{v.notes}</p>}
             </li>
           ))}
@@ -123,6 +124,8 @@ function VehicleForm({ onSaved }: { onSaved: () => void }) {
   const [model, setModel] = useState('');
   const [color, setColor] = useState('');
   const [seats, setSeats] = useState(5);
+  const [smoking, setSmoking] = useState(false);
+  const [pets, setPets] = useState(false);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -140,13 +143,15 @@ function VehicleForm({ onSaved }: { onSaved: () => void }) {
     setError(null);
     const { error } = await supabase
       .from('vehicles')
-      .insert({ model: model.trim(), color: color.trim() || null, seats, notes: notes.trim() || null });
+      .insert({ model: model.trim(), color: color.trim() || null, seats, smoking, pets, notes: notes.trim() || null });
     if (error) {
       setError(errorText(error));
       return;
     }
     setModel('');
     setColor('');
+    setSmoking(false);
+    setPets(false);
     setNotes('');
     setOpen(false);
     onSaved();
@@ -172,6 +177,17 @@ function VehicleForm({ onSaved }: { onSaved: () => void }) {
           />
         </Field>
       </div>
+      <fieldset className="rules">
+        <legend className="field-label">{t('pp.rules')}</legend>
+        <label className="check">
+          <input type="checkbox" checked={smoking} onChange={(e) => setSmoking(e.target.checked)} />
+          {t('pp.smoking')}
+        </label>
+        <label className="check">
+          <input type="checkbox" checked={pets} onChange={(e) => setPets(e.target.checked)} />
+          {t('pp.pets')}
+        </label>
+      </fieldset>
       <Field label={t('pp.notes')} hint={t('pp.notesHint')}>
         <input value={notes} onChange={(e) => setNotes(e.target.value)} />
       </Field>

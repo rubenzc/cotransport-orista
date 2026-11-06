@@ -42,6 +42,8 @@ Web app de coche compartido entre vecinos de un pueblo sin transporte público. 
   - Permisos: políticas RLS.
   - El frontend no debe duplicar ni sustituir estas reglas; solo las refleja en la interfaz.
 - Cualquier cambio de esquema se añade a `supabase/schema.sql` (estado final, para instalaciones nuevas) **y** en un archivo numerado nuevo de `supabase/migrations/` (idempotente, para el proyecto ya desplegado). El administrador ejecuta la migración a mano en el SQL Editor de Supabase; hay que avisarle.
+- **Gastos**: `trips.distance_km` (km del recorrido, opcional) y la tarifa `KM_RATE` (`src/lib/config.ts`, 0,26 €/km en 2026; revisar cada año). El coste no se guarda: se calcula con `tripCost` / `costSharers` / `costPerPerson` de `src/lib/format.ts`. Reparto: conductor + pasajeros confirmados (en peticiones, personas + un conductor), nunca más que las plazas del vehículo (`seats` + 1).
+- Vehículos: `smoking` y `pets` (booleanos, por defecto falso); se muestran con `VehicleRules` (icono + texto, nunca solo color).
 - Días de la semana en formato ISO: 1 = lunes … 7 = domingo. Las fechas se guardan como `date` (YYYY-MM-DD) y las horas como `time`.
 - Las consultas con joins usan `TRIP_SELECT` de `src/lib/supabase.ts`. El resultado se convierte con `as unknown as Trip`, porque el parser de tipos de supabase-js no entiende el select concatenado.
 

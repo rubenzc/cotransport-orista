@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Icon } from '../components/Icon';
-import { DayPicker, ErrorBox, Field, PlacesDatalist, Spinner } from '../components/ui';
+import { DayPicker, ErrorBox, Field, PlacesDatalist, Spinner, VehicleRules } from '../components/ui';
 import { useAuth } from '../lib/auth';
-import { category } from '../lib/config';
+import { category, KM_RATE } from '../lib/config';
 import {
   commitmentLabel,
   fmtDate,
@@ -11,8 +11,13 @@ import {
   fmtDuration,
   fmtTime,
   hasDriver,
+  costPerPerson,
+  costSharers,
+  fmtKm,
+  fmtMoney,
   nextOccurrence,
   proposalLabel,
+  tripCost,
   seatsLeft,
   seatsUsed,
   todayISO,
@@ -173,10 +178,12 @@ export default function TripDetail() {
               <dd>
                 {trip.vehicle.model}
                 {trip.vehicle.color && ` · ${trip.vehicle.color}`}
+                <VehicleRules vehicle={trip.vehicle} />
                 {trip.vehicle.notes && <div className="muted small">{trip.vehicle.notes}</div>}
               </dd>
             </div>
           )}
+          {trip.distance_km && <CostRow trip={trip} />}
         </dl>
 
         {trip.pickup_points.length > 0 && (
@@ -643,5 +650,27 @@ function ProposalItem({
         </button>
       )}
     </li>
+  );
+}
+
+function CostRow({ trip }: { trip: Trip }) {
+  const { t, tn } = useT();
+  const total = tripCost(trip)!;
+  const now = costSharers(trip);
+  const max = trip.seats + 1;
+  return (
+    <div className="fact-wide">
+      <dt>{t('td.cost')}</dt>
+      <dd>
+        <strong>{t('td.costEach', { each: fmtMoney(costPerPerson(trip)!), people: tn('ppl', now) })}</strong>
+        <div className="muted small">
+          {t('td.costTotal', { total: fmtMoney(total), km: fmtKm(trip.distance_km!), rate: fmtMoney(KM_RATE) })}
+        </div>
+        {now < max && (
+          <div className="muted small">{t('td.costFull', { people: tn('ppl', max), each: fmtMoney(costPerPerson(trip, max)!) })}</div>
+        )}
+        <div className="muted small">{t('td.costNote')}</div>
+      </dd>
+    </div>
   );
 }

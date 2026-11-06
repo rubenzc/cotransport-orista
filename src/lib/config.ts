@@ -40,6 +40,9 @@ export const CATEGORIES = [
   { value: 'otro', icon: 'car' },
 ] as const satisfies readonly { value: string; icon: IconName }[];
 
+// Tarifa per quilòmetre (€/km). Import oficial de 2026 a Espanya; es revisa cada any.
+export const KM_RATE = 0.26;
+
 // Dies ISO: 1 = dilluns … 7 = diumenge
 export const DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 

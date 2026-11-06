@@ -1,4 +1,5 @@
 import { getLocale, tr, type Key } from './i18n';
+import { KM_RATE } from './config';
 import type { Commitment, Trip } from './types';
 
 /** '08:30:00' -> '08:30' */
@@ -102,6 +103,38 @@ export function seatsLeft(trip: Trip): number {
 
 export function hasDriver(trip: Trip): boolean {
   return (trip.commitments ?? []).some((c) => c.role === 'conductor' && c.status === 'confirmado');
+}
+
+/** Import en euros amb el format de l'idioma actual (7,50 €). */
+export function fmtMoney(n: number): string {
+  return new Intl.NumberFormat(getLocale(), { style: 'currency', currency: 'EUR' }).format(n);
+}
+
+/** Quilòmetres amb com decimal si cal (12,5). */
+export function fmtKm(n: number): string {
+  return new Intl.NumberFormat(getLocale(), { maximumFractionDigits: 1 }).format(n);
+}
+
+/** Cost total del recorregut: km x tarifa, arrodonit a cèntims. */
+export function tripCost(trip: Pick<Trip, 'distance_km'>): number | null {
+  return trip.distance_km ? Math.round(trip.distance_km * KM_RATE * 100) / 100 : null;
+}
+
+/**
+ * Persones que reparteixen la despesa: qui condueix + els passatgers.
+ * Oferta: conductor + places ocupades confirmades. Petició: les persones que ho demanen + un conductor.
+ * Mai passa de les places del vehicle (les places lliures + el conductor).
+ */
+export function costSharers(trip: Trip): number {
+  const max = trip.seats + 1;
+  if (trip.kind === 'peticion') return max;
+  return Math.min(max, 1 + seatsUsed(trip));
+}
+
+/** Cost per persona amb els qui van ara; null si el viatge no té quilòmetres. */
+export function costPerPerson(trip: Trip, sharers = costSharers(trip)): number | null {
+  const total = tripCost(trip);
+  return total === null ? null : Math.round((total / sharers) * 100) / 100;
 }
 
 export function fmtDuration(min: number | null): string {

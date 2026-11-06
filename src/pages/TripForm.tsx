@@ -3,8 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { DayPicker, ErrorBox, Field, PlacesDatalist, Segmented, Spinner } from '../components/ui';
 import { useAuth } from '../lib/auth';
-import { CATEGORIES, category } from '../lib/config';
-import { fmtTime, todayISO } from '../lib/format';
+import { CATEGORIES, KM_RATE, category } from '../lib/config';
+import { fmtMoney, fmtTime, tripCost, todayISO } from '../lib/format';
 import { useT } from '../lib/i18n';
 import { errorText, supabase } from '../lib/supabase';
 import type { Schedule, Trip, TripKind, Vehicle } from '../lib/types';
@@ -22,6 +22,7 @@ interface FormState {
   departure_time: string;
   return_time: string;
   duration_min: string;
+  distance_km: string;
   seats: string;
   vehicle_id: string;
   description: string;
@@ -40,6 +41,7 @@ const EMPTY: FormState = {
   departure_time: '08:00',
   return_time: '',
   duration_min: '',
+  distance_km: '',
   seats: '3',
   vehicle_id: '',
   description: '',
@@ -59,6 +61,7 @@ function fromTrip(trip: Trip): FormState {
     departure_time: fmtTime(trip.departure_time),
     return_time: fmtTime(trip.return_time),
     duration_min: trip.duration_min ? String(trip.duration_min) : '',
+    distance_km: trip.distance_km ? String(trip.distance_km) : '',
     seats: String(trip.seats),
     vehicle_id: trip.vehicle_id ?? '',
     description: trip.description ?? '',
@@ -142,6 +145,7 @@ export default function TripForm() {
       departure_time: form.departure_time,
       return_time: form.return_time || null,
       duration_min: form.duration_min ? Number(form.duration_min) : null,
+      distance_km: form.distance_km ? Number(form.distance_km) : null,
       seats: Number(form.seats),
       vehicle_id: form.kind === 'oferta' && form.vehicle_id ? form.vehicle_id : null,
       description: form.description.trim() || null,
@@ -168,6 +172,11 @@ export default function TripForm() {
   }
 
   const isOffer = form.kind === 'oferta';
+  const kmNum = Number(form.distance_km);
+  const total = kmNum > 0 ? tripCost({ distance_km: kmNum }) : null;
+  const fullCar = Math.min(9, Math.max(1, Number(form.seats) || 1) + 1);
+  const costPreview =
+    total === null ? null : t('tf.costPreview', { total: fmtMoney(total), people: tn('ppl', fullCar), each: fmtMoney(total / fullCar) });
 
   return (
     <form className="stack" onSubmit={submit}>
@@ -319,6 +328,19 @@ export default function TripForm() {
             placeholder={t('tf.durationPh')}
           />
         </Field>
+        <Field label={t('tf.distance')} hint={t('tf.distanceHint', { rate: fmtMoney(KM_RATE) })}>
+          <input
+            type="number"
+            inputMode="decimal"
+            min={0.1}
+            max={1000}
+            step="0.1"
+            value={form.distance_km}
+            onChange={(e) => set('distance_km', e.target.value)}
+            placeholder={t('tf.distancePh')}
+          />
+        </Field>
+        {costPreview && <p className="muted small">{costPreview}</p>}
       </section>
 
       <section className="card stack">
