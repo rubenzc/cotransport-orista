@@ -137,6 +137,17 @@ export function costPerPerson(trip: Trip, sharers = costSharers(trip)): number |
   return total === null ? null : Math.round((total / sharers) * 100) / 100;
 }
 
+/**
+ * Simulació: persones que repartirien la despesa si un veí s'hi apuntés i el confirmessin.
+ * `exclude` és l'id d'una sol·licitud pròpia que s'està editant (no es compta dues vegades).
+ */
+export function costSharersIfJoined(trip: Trip, seats: number, days: number[] | null, exclude?: string): number {
+  const max = trip.seats + 1;
+  const others = (trip.commitments ?? []).filter((c) => !exclude || c.id !== exclude);
+  const extra = { role: 'pasajero', status: 'confirmado', seats, days_of_week: days } as Commitment;
+  return Math.min(max, 1 + seatsUsed(trip, [...others, extra]));
+}
+
 export function fmtDuration(min: number | null): string {
   if (!min) return '';
   if (min < 60) return tr('dur.min', { n: min });

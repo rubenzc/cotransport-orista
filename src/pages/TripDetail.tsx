@@ -13,6 +13,7 @@ import {
   hasDriver,
   costPerPerson,
   costSharers,
+  costSharersIfJoined,
   fmtKm,
   fmtMoney,
   nextOccurrence,
@@ -415,7 +416,7 @@ function CommitmentDetails({ c }: { c: Commitment }) {
 }
 
 function JoinForm({ trip, existing, onDone }: { trip: Trip; existing?: Commitment; onDone: () => void }) {
-  const { t } = useT();
+  const { t, tn } = useT();
   const isOffer = trip.kind === 'oferta';
   const tripDays = trip.days_of_week ?? [];
   const [seats, setSeats] = useState(existing?.seats ?? 1);
@@ -424,6 +425,18 @@ function JoinForm({ trip, existing, onDone }: { trip: Trip; existing?: Commitmen
   const [note, setNote] = useState(existing?.note ?? '');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Simulación del coste si te apuntas (solo ofertas con kilómetros)
+  let costSim: string | null = null;
+  if (isOffer && trip.distance_km && seats >= 1 && (trip.schedule !== 'recurrente' || days.length > 0)) {
+    const joinDays = trip.schedule === 'recurrente' && days.length < tripDays.length ? days : null;
+    const n = costSharersIfJoined(trip, seats, joinDays, existing?.id);
+    costSim = t('jf.costSim', {
+      each: fmtMoney(costPerPerson(trip, n)!),
+      people: tn('ppl', n),
+      now: fmtMoney(costPerPerson(trip)!),
+    });
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -483,6 +496,12 @@ function JoinForm({ trip, existing, onDone }: { trip: Trip; existing?: Commitmen
           placeholder={isOffer ? t('jf.msgJoin') : t('jf.msgDrive')}
         />
       </Field>
+      {costSim && (
+        <p className="cost-sim" role="status">
+          <Icon name="money" />
+          {costSim}
+        </p>
+      )}
       <ErrorBox message={error} />
       <button className="btn primary block" disabled={busy}>
         {busy ? t('common.sending') : existing && existing.status !== 'cancelado' ? t('common.save') : t('jf.send')}

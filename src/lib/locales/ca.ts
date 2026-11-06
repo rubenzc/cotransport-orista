@@ -23,7 +23,7 @@ export const ca = {
 
   'lang.label': 'Idioma',
   'lang.ca': 'Català',
-  'lang.es': 'Español',
+  'lang.es': 'Castellano',
 
   'cfg.title': 'Falta configurar Supabase',
   'cfg.body':
@@ -295,6 +295,7 @@ export const ca = {
   'pp.notes': 'Notes',
   'ppl.one': '{n} persona',
   'ppl.other': '{n} persones',
+  'jf.costSim': 'Si et confirmen: {each} per persona ({people}). Ara: {now} per persona.',
   'pp.rules': 'Normes del cotxe',
   'pp.smoking': 'Es pot fumar al cotxe',
   'pp.pets': 'Admet mascotes',

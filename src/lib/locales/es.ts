@@ -25,7 +25,7 @@ export const es: Dict = {
 
   'lang.label': 'Idioma',
   'lang.ca': 'Català',
-  'lang.es': 'Español',
+  'lang.es': 'Castellano',
 
   'cfg.title': 'Falta configurar Supabase',
   'cfg.body':
@@ -297,6 +297,7 @@ export const es: Dict = {
   'pp.notes': 'Notas',
   'ppl.one': '{n} persona',
   'ppl.other': '{n} personas',
+  'jf.costSim': 'Si te confirman: {each} por persona ({people}). Ahora: {now} por persona.',
   'pp.rules': 'Normas del coche',
   'pp.smoking': 'Se puede fumar en el coche',
   'pp.pets': 'Admite mascotas',
