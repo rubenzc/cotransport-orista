@@ -22,6 +22,7 @@ interface FormState {
   valid_until: string;
   departure_time: string;
   return_time: string;
+  round_trip: boolean;
   duration_min: string;
   distance_km: string;
   seats: string;
@@ -41,12 +42,18 @@ const EMPTY: FormState = {
   valid_until: '',
   departure_time: '08:00',
   return_time: '',
+  round_trip: false,
   duration_min: '',
   distance_km: '',
   seats: '3',
   vehicle_id: '',
   description: '',
 };
+
+/** Km de ida, o de ida y vuelta, con un decimal. */
+function roundKm(oneWay: number, roundTrip: boolean): number {
+  return Math.round(oneWay * (roundTrip ? 2 : 1) * 10) / 10;
+}
 
 function fromTrip(trip: Trip): FormState {
   return {
@@ -61,6 +68,7 @@ function fromTrip(trip: Trip): FormState {
     valid_until: trip.valid_until ?? '',
     departure_time: fmtTime(trip.departure_time),
     return_time: fmtTime(trip.return_time),
+    round_trip: !!trip.return_time,
     duration_min: trip.duration_min ? String(trip.duration_min) : '',
     distance_km: trip.distance_km ? String(trip.distance_km) : '',
     seats: String(trip.seats),
@@ -83,6 +91,13 @@ export default function TripForm() {
   const [blocked, setBlocked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [calc, setCalc] = useState<{ busy: boolean; msg: string | null; err: string | null }>({
+    busy: false,
+    msg: null,
+    err: null,
+  });
+  // km de ida calculados automaticamente (null si la persona los ha escrito a mano)
+  const [autoKm, setAutoKm] = useState<number | null>(null);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => setForm((f) => ({ ...f, [key]: value }));
 
@@ -144,7 +159,7 @@ export default function TripForm() {
       days_of_week: form.schedule === 'recurrente' ? form.days_of_week : null,
       valid_until: form.schedule === 'recurrente' && form.valid_until ? form.valid_until : null,
       departure_time: form.departure_time,
-      return_time: form.return_time || null,
+      return_time: form.round_trip && form.return_time ? form.return_time : null,
       duration_min: form.duration_min ? Number(form.duration_min) : null,
       distance_km: form.distance_km ? Number(form.distance_km) : null,
       seats: Number(form.seats),
@@ -172,12 +187,10 @@ export default function TripForm() {
     );
   }
 
-  const [calc, setCalc] = useState<{ busy: boolean; msg: string | null; err: string | null }>({
-    busy: false,
-    msg: null,
-    err: null,
-  });
-  const [roundTrip, setRoundTrip] = useState(false);
+  function setRoundTrip(rt: boolean) {
+    setForm((f) => ({ ...f, round_trip: rt, distance_km: autoKm !== null ? String(roundKm(autoKm, rt)) : f.distance_km }));
+    if (autoKm !== null) setCalc((c) => (c.msg ? { ...c, msg: t('tf.calcDone', { km: fmtKm(roundKm(autoKm, rt)) }) } : c));
+  }
 
   async function calcKm() {
     const from = form.origin.trim();
@@ -189,7 +202,8 @@ export default function TripForm() {
     setCalc({ busy: true, msg: null, err: null });
     try {
       const one = await routeKm(from, to);
-      const km = Math.round(one * (roundTrip ? 2 : 1) * 10) / 10;
+      const km = roundKm(one, form.round_trip);
+      setAutoKm(one);
       set('distance_km', String(km));
       setCalc({ busy: false, msg: t('tf.calcDone', { km: fmtKm(km) }), err: null });
     } catch (e) {
@@ -332,7 +346,18 @@ export default function TripForm() {
             </Field>
           </>
         )}
-        <div className="grid-2">
+        <Field label={t('tf.legKind')}>
+          <Segmented
+            label={t('tf.legKind')}
+            value={form.round_trip ? 'ida-vuelta' : 'ida'}
+            onChange={(v) => setRoundTrip(v === 'ida-vuelta')}
+            options={[
+              { value: 'ida', label: t('tf.oneWay') },
+              { value: 'ida-vuelta', label: t('tf.roundTripOpt') },
+            ]}
+          />
+        </Field>
+        <div className={form.round_trip ? 'grid-2' : undefined}>
           <Field label={t('tf.departure')}>
             <input
               type="time"
@@ -341,9 +366,16 @@ export default function TripForm() {
               onChange={(e) => set('departure_time', e.target.value)}
             />
           </Field>
-          <Field label={t('tf.return')}>
-            <input type="time" value={form.return_time} onChange={(e) => set('return_time', e.target.value)} />
-          </Field>
+          {form.round_trip && (
+            <Field label={t('tf.return')}>
+              <input
+                type="time"
+                required
+                value={form.return_time}
+                onChange={(e) => set('return_time', e.target.value)}
+              />
+            </Field>
+          )}
         </div>
         <Field label={t('tf.duration')}>
           <input
@@ -356,6 +388,24 @@ export default function TripForm() {
             placeholder={t('tf.durationPh')}
           />
         </Field>
+      </section>
+
+      <section className="card stack">
+        <h3>{t('tf.kmTitle')}</h3>
+        <button type="button" className="btn primary block" disabled={calc.busy} onClick={calcKm}>
+          <Icon name="route" />
+          {calc.busy ? t('tf.calcing') : t('tf.calcKm')}
+        </button>
+        <p className="field-hint">{form.round_trip ? t('tf.calcHelpRound') : t('tf.calcHelpOne')}</p>
+        {calc.msg && (
+          <p className="notice-inline" role="status">
+            {calc.msg}
+          </p>
+        )}
+        {calc.err && <ErrorBox message={calc.err} />}
+        <p className="or-divider" aria-hidden="true">
+          <span>{t('tf.or')}</span>
+        </p>
         <Field label={t('tf.distance')} hint={t('tf.distanceHint', { rate: fmtMoney(KM_RATE) })}>
           <input
             type="number"
@@ -364,24 +414,13 @@ export default function TripForm() {
             max={1000}
             step="0.1"
             value={form.distance_km}
-            onChange={(e) => set('distance_km', e.target.value)}
+            onChange={(e) => {
+              setAutoKm(null);
+              set('distance_km', e.target.value);
+            }}
             placeholder={t('tf.distancePh')}
           />
         </Field>
-        <label className="check">
-          <input type="checkbox" checked={roundTrip} onChange={(e) => setRoundTrip(e.target.checked)} />
-          {t('tf.roundTrip')}
-        </label>
-        <button type="button" className="btn block" disabled={calc.busy} onClick={calcKm}>
-          <Icon name="route" />
-          {calc.busy ? t('tf.calcing') : t('tf.calcKm')}
-        </button>
-        {calc.msg && (
-          <p className="muted small" role="status">
-            {calc.msg}
-          </p>
-        )}
-        {calc.err && <ErrorBox message={calc.err} />}
         {costPreview && <p className="muted small">{costPreview}</p>}
       </section>
 
