@@ -4,8 +4,9 @@ import { Icon } from '../components/Icon';
 import { DayPicker, ErrorBox, Field, PlacesDatalist, Segmented, Spinner } from '../components/ui';
 import { useAuth } from '../lib/auth';
 import { CATEGORIES, KM_RATE, category } from '../lib/config';
-import { fmtMoney, fmtTime, tripCost, todayISO } from '../lib/format';
+import { fmtKm, fmtMoney, fmtTime, tripCost, todayISO } from '../lib/format';
 import { useT } from '../lib/i18n';
+import { RoutingError, routeKm } from '../lib/routing';
 import { errorText, supabase } from '../lib/supabase';
 import type { Schedule, Trip, TripKind, Vehicle } from '../lib/types';
 
@@ -169,6 +170,33 @@ export default function TripForm() {
         <ErrorBox message={error} />
       </div>
     );
+  }
+
+  const [calc, setCalc] = useState<{ busy: boolean; msg: string | null; err: string | null }>({
+    busy: false,
+    msg: null,
+    err: null,
+  });
+  const [roundTrip, setRoundTrip] = useState(false);
+
+  async function calcKm() {
+    const from = form.origin.trim();
+    const to = form.destination.trim();
+    if (!from || !to) {
+      setCalc({ busy: false, msg: null, err: t('tf.calcNeedPlaces') });
+      return;
+    }
+    setCalc({ busy: true, msg: null, err: null });
+    try {
+      const one = await routeKm(from, to);
+      const km = Math.round(one * (roundTrip ? 2 : 1) * 10) / 10;
+      set('distance_km', String(km));
+      setCalc({ busy: false, msg: t('tf.calcDone', { km: fmtKm(km) }), err: null });
+    } catch (e) {
+      const err =
+        e instanceof RoutingError && e.code === 'notFound' ? t('rt.notFound', { place: e.place ?? '' }) : t('rt.failed');
+      setCalc({ busy: false, msg: null, err });
+    }
   }
 
   const isOffer = form.kind === 'oferta';
@@ -340,6 +368,20 @@ export default function TripForm() {
             placeholder={t('tf.distancePh')}
           />
         </Field>
+        <label className="check">
+          <input type="checkbox" checked={roundTrip} onChange={(e) => setRoundTrip(e.target.checked)} />
+          {t('tf.roundTrip')}
+        </label>
+        <button type="button" className="btn block" disabled={calc.busy} onClick={calcKm}>
+          <Icon name="route" />
+          {calc.busy ? t('tf.calcing') : t('tf.calcKm')}
+        </button>
+        {calc.msg && (
+          <p className="muted small" role="status">
+            {calc.msg}
+          </p>
+        )}
+        {calc.err && <ErrorBox message={calc.err} />}
         {costPreview && <p className="muted small">{costPreview}</p>}
       </section>
 
